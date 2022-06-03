@@ -1,24 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:reimink_zwembaden_admin/data/constants/colors/Colors.dart';
+import 'package:get_it/get_it.dart';
+import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
+import 'package:reimink_zwembaden_admin/common/utils/validators.dart';
+import 'package:reimink_zwembaden_admin/data/models/network/network_models.dart';
+import 'package:reimink_zwembaden_admin/data/repositories/admin_repository.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/custom_input_field.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/primary_button.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  RegisterScreenState createState() => RegisterScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class RegisterScreenState extends State<RegisterScreen> {
   bool showpassword = false;
   final TextEditingController inviteController = TextEditingController();
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  // final AuthController controller = AuthController();
+  final AdminRepository _adminRepository = GetIt.I<AdminRepository>();
   String? emailErr;
   String? usernameErr;
   String? passwordErr;
@@ -38,7 +42,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 70,
               ),
               Image.asset(
-                "images/logo.jpg",
+                Drawables.logo,
                 width: 170,
                 height: 66,
               ),
@@ -46,7 +50,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 7,
               ),
               const Text(
-                "zwembaden | wellness | waterfun",
+                Strings.tagline,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.normal,
@@ -57,7 +61,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 46,
               ),
               const Text(
-                "Registreren",
+                Strings.register,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -67,22 +71,22 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(
                 height: 46,
               ),
-              CustomInputField(
-                controller: inviteController,
-                label: "Inlogcode",
-                hintText: "Voer de uitnodigingscode in",
-                icon: Icons.pin,
-                isObscure: false,
-                errorText: inviteErr,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              // CustomInputField(
+              //   controller: inviteController,
+              //   label: "Inlogcode",
+              //   hintText: "Voer de uitnodigingscode in",
+              //   icon: Icons.pin,
+              //   isObscure: false,
+              //   errorText: inviteErr,
+              // ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
               CustomInputField(
                 controller: userNameController,
-                label: "gebruikersnaam",
-                hintText: "gebruikersnaam",
-                icon: Icons.pin,
+                label: Strings.userName,
+                hintText: Strings.userName,
+                icon: Icons.person,
                 isObscure: false,
                 errorText: usernameErr,
               ),
@@ -91,8 +95,8 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               CustomInputField(
                 controller: emailController,
-                label: "Email",
-                hintText: "Email",
+                label: Strings.email,
+                hintText: Strings.email,
                 icon: Icons.email,
                 isObscure: false,
                 errorText: emailErr,
@@ -102,8 +106,8 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               CustomInputField(
                 controller: passwordController,
-                label: "Wachtwoord",
-                hintText: "Wachtwoord",
+                label: Strings.password,
+                hintText: Strings.password,
                 suffixIcon: InkWell(
                   onTap: () {
                     setState(() {
@@ -131,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: const <Widget>[
                   Text(
-                    "Wachtwoord vergeten?",
+                    Strings.forgotPassword,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -144,30 +148,23 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 50,
               ),
               PrimaryButton(
-                label: "Registreren",
+                label: Strings.register,
                 onPressed: () async {
                   setState(() {
-                    inviteErr = inviteController.text != "1321"
-                        ? "ongeldige uitnodigingscode"
-                        : null;
                     usernameErr = userNameController.text.isEmpty
-                        ? "gebruikersnaam is vereist"
+                        ? Strings.userNameRequired
                         : null;
-                    emailErr =
-                        !RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                .hasMatch(
-                      emailController.text,
-                    )
-                            ? "Ongeldig e-mail"
+                    emailErr = !Validator.validateEmail(emailController.text)
+                        ? Strings.invalidEmail
+                        : null;
+                    passwordErr =
+                        !Validator.validatePassword(passwordController.text)
+                            ? Strings.passwordLengthValidationMessage
                             : null;
-                    passwordErr = passwordController.text.length < 6
-                        ? "Het wachtwoord moet op zijn minst 6 tekens lang zijn"
-                        : null;
                   });
                   if (emailErr == null &&
                       usernameErr == null &&
-                      passwordErr == null &&
-                      inviteErr == null) {
+                      passwordErr == null) {
                     showDialog(
                       context: context,
                       builder: (_) => const SizedBox(
@@ -178,17 +175,18 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                     );
-                    final authState =
-                        await controller.registerWithEmailAndPassword(
-                      userEmail: emailController.text,
-                      userPassword: passwordController.text,
+                    final RegisterResponse authState =
+                        await _adminRepository.register(
+                      AuthRequest(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      ),
                     );
-                    switch (authState) {
+                    switch (authState.registerationState) {
                       case RegisterationState.emailAlreadyExists:
                         Navigator.pop(context);
                         setState(() {
-                          emailErr =
-                              "Op voorwaarde dat e-mail al in gebruik is";
+                          emailErr = Strings.emailAlreadyInUse;
                         });
                         // ScaffoldMessenger.of(context).showSnackBar(
                         //   SnackBar(
@@ -203,16 +201,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       case RegisterationState.successful:
                         {
                           final user = FirebaseAuth.instance.currentUser!;
-                          await DatabaseController().setUsername(
-                            uid: user.uid,
-                            userName: userNameController.text,
-                            email: emailController.text,
-                          );
+                          // await DatabaseController().setUsername(
+                          //   uid: user.uid,
+                          //   userName: userNameController.text,
+                          //   email: emailController.text,
+                          // );
                           await user.sendEmailVerification();
                           SchedulerBinding.instance!
                               .addPostFrameCallback((_) async {
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                                'verifyEmail', (Route<dynamic> route) => false);
+                                PagePath.verifyEmail,
+                                (Route<dynamic> route) => false);
                           });
                         }
                         break;
@@ -234,7 +233,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    "Heeft u al een account?",
+                    Strings.alreadyHaveAnAccount,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -246,12 +245,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.popAndPushNamed(context, "loginScreen");
+                      Navigator.popAndPushNamed(context, PagePath.login);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        "Hier inloggen",
+                        Strings.loginHere,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

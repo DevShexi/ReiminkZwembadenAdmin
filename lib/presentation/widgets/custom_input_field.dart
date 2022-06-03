@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reimink_zwembaden_admin/data/constants/colors/Colors.dart';
+import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 
 class CustomInputField extends StatelessWidget {
   const CustomInputField({
@@ -30,7 +30,7 @@ class CustomInputField extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(7),
-        color: errorText == null ? AppColors.lightBlue : AppColors.errorLight,
+        color: errorText == null ? AppColors.lightGrey : AppColors.errorLight,
         border: Border.all(
           color: errorText == null ? AppColors.lightBlue : AppColors.error,
           width: 1.0,

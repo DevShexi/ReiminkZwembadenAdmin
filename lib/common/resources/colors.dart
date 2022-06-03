@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 abstract class AppColors {
+  static const Color white = Colors.white;
+  static const Color lightGrey = Color(0xffF4FBFE);
+  static const Color backgroundGrey = Color(0xffE5E5E5);
   static const black = Color(0xff414042);
   static const error = Color(0xffef5350);
   static const errorLight = Color(0xffffcdd2);
   static const Color grey = Color(0xffA6A6A6);
+  static const Color textGrey = Color(0xffB5B5B5);
   static const Color lightBlue = Color(0xffC3EEFF);
   static const Color blue = Color(0xff0195CC);
+  static const Color primary = blue;
+  static const Color accent = blue;
 
   //Charts Colors
   static const lightPink = Color(0x66F1B3DA);

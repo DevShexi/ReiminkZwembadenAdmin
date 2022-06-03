@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:reimink_zwembaden_admin/data/constants/colors/Colors.dart';
+import 'package:get_it/get_it.dart';
+import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
+import 'package:reimink_zwembaden_admin/common/utils/validators.dart';
+import 'package:reimink_zwembaden_admin/data/models/network/network_models.dart';
+import 'package:reimink_zwembaden_admin/data/repositories/admin_repository.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/custom_input_field.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/primary_button.dart';
 
@@ -15,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showPassword = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final AdminRepository _adminRepository = GetIt.I<AdminRepository>();
   String? emailError;
   String? passwordError;
   @override
@@ -27,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               const SizedBox(height: 70.0),
               Image.asset(
-                "images/logo.jpg",
+                Drawables.logo,
                 width: 170,
                 height: 66,
               ),
@@ -35,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 7,
               ),
               const Text(
-                "zwembaden | wellness | waterfun",
+                Strings.tagline,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.normal,
@@ -46,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 46,
               ),
               const Text(
-                "Inloggen",
+                Strings.login,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -58,8 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               CustomInputField(
                 controller: emailController,
-                label: "Email",
-                hintText: "Email",
+                label: Strings.email,
+                hintText: Strings.email,
                 icon: Icons.email,
                 isObscure: false,
                 errorText: emailError,
@@ -67,8 +71,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
               CustomInputField(
                 controller: passwordController,
-                label: "Password",
-                hintText: "Password",
+                label: Strings.password,
+                hintText: Strings.password,
                 suffixIcon: InkWell(
                   onTap: () {
                     setState(() {
@@ -95,19 +99,19 @@ class _LoginScreenState extends State<LoginScreen> {
               InkWell(
                 onTap: () async {
                   if (emailController.text.isNotEmpty &&
-                      RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                          .hasMatch(
+                      Validator.validateEmail(
                         emailController.text,
                       )) {
-                    final status =
-                        await controller.forgetPassword(emailController.text);
+                    final status = await _adminRepository
+                        .forgotPassword(emailController.text);
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return status
                               ? AlertDialog(
                                   title: const Text(
-                                      "Wachtwoord opnieuw instellen"),
+                                    Strings.resetPassword,
+                                  ),
                                   actions: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -116,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       child: PrimaryButton(
                                         color: Colors.green,
-                                        label: "Close",
+                                        label: Strings.close,
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
@@ -124,13 +128,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ],
                                   content: Text(
-                                    "Er is een link voor het opnieuw instellen van uw wachtwoord naar uw e-mailadres verzonden: ${emailController.text}",
+                                    "${Strings.passwordResetLinkSentMessage} ${emailController.text}",
                                     textAlign: TextAlign.left,
                                   ),
                                 )
                               : AlertDialog(
                                   title: const Text(
-                                      "Wachtwoord opnieuw instellen"),
+                                    Strings.resetPassword,
+                                  ),
                                   actions: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -139,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       child: PrimaryButton(
                                         color: AppColors.blue,
-                                        label: "Close",
+                                        label: Strings.close,
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
@@ -147,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ],
                                   content: const Text(
-                                    "Wachtwoord opnieuw instellen is niet voltooid. Controleer uw e-mail of probeer het opnieuw",
+                                    Strings.passwordResetErrorMessage,
                                     textAlign: TextAlign.left,
                                   ),
                                 );
@@ -157,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text("Wachtwoord opnieuw instellen"),
+                            title: const Text(Strings.resetPassword),
                             actions: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -166,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 child: PrimaryButton(
                                   color: Colors.red[400],
-                                  label: "Close",
+                                  label: Strings.close,
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
@@ -174,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ],
                             content: const Text(
-                              "Geef een geldig e-mailadres op om uw wachtwoord opnieuw in te stellen",
+                              Strings.invalidResetEmailErrorMessage,
                               textAlign: TextAlign.left,
                             ),
                           );
@@ -185,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: const <Widget>[
                     Text(
-                      "Wachtwoord vergeten?",
+                      Strings.forgotPassword,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -199,19 +204,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50,
               ),
               PrimaryButton(
-                label: "Inloggen",
+                label: Strings.login,
                 onPressed: () async {
                   setState(() {
-                    emailError =
-                        !RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                .hasMatch(
-                      emailController.text,
-                    )
-                            ? "Ongeldig e-mail"
-                            : null;
-                    passwordError = passwordController.text.length < 6
-                        ? "Tenminste 6 tekens"
+                    emailError = !Validator.validateEmail(emailController.text)
+                        ? Strings.invalidEmail
                         : null;
+                    passwordError =
+                        !Validator.validatePassword(passwordController.text)
+                            ? Strings.atleast6Characters
+                            : null;
                   });
                   if (emailError == null && passwordError == null) {
                     showDialog(
@@ -224,35 +226,39 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     );
-                    final authState = await controller.loginWithEmailPassword(
-                        emailController.text, passwordController.text);
+                    final LoginResponse authState =
+                        await _adminRepository.login(
+                      AuthRequest(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      ),
+                    );
                     Navigator.pop(context);
-                    switch (authState) {
+                    debugPrint(
+                        "--------- Removing the Progress Indicator ----------");
+                    switch (authState.loginState) {
                       case LoginState.userNotFound:
-                        // Navigator.pop(context);
                         setState(() {
-                          emailError =
-                              "Geen gebruiker gevonden voor deze e-mail";
+                          emailError = Strings.noUserFoundMessage;
                         });
                         break;
                       case LoginState.wrongPassword:
                         {
-                          // Navigator.pop(context);
                           setState(() {
-                            passwordError = "Uw wachtwoord is onjuist";
+                            passwordError = Strings.inCorrectPasswordMessage;
                           });
                         }
                         break;
                       case LoginState.success:
                         {
                           debugPrint("Login");
-                          // Navigator.pop(context);
                           // print("User Logged In Successfully");
-                          SchedulerBinding.instance!
-                              .addPostFrameCallback((_) async {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                'landing', (Route<dynamic> route) => false);
-                          });
+                          // SchedulerBinding.instance!
+                          //     .addPostFrameCallback((_) async {
+                          //   Navigator.of(context).pushNamedAndRemoveUntil(
+                          //       PagePath.landingPage,
+                          //       (Route<dynamic> route) => false);
+                          // });
                         }
                         break;
                       default:
@@ -260,7 +266,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
               ),
-              SizedBox(height: 200.h),
+              const SizedBox(height: 50),
+              // const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    Strings.dontHaveAnAccount,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, PagePath.register);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        Strings.registerHere,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

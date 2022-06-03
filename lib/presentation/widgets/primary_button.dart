@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reimink_zwembaden_admin/data/constants/colors/Colors.dart';
+import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
@@ -17,7 +17,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      // height: 60,
       width: 388,
       child: Row(
         children: [

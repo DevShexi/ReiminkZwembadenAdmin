@@ -1,8 +1,8 @@
-import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:reimink_zwembaden_admin/data/constants/colors/colors.dart';
-import 'package:reimink_zwembaden_admin/presentation/screens/landing_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+import 'package:reimink_zwembaden_admin/presentation/screens/landing/landing_screen.dart';
+import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
