@@ -13,8 +13,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text("Settings Page"),
+        children: const <Widget>[
+          Text("Settings Page"),
         ],
       ),
     );

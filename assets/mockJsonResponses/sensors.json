@@ -1,0 +1,20 @@
+{
+  "sensors": [
+    {
+      "name": "Vrij Chloor",
+      "isOn": true
+    },
+    {
+      "name": "Gebonden Chloor",
+      "isOn": true
+    },
+    {
+      "name": "pH",
+      "isOn": true
+    },
+    {
+      "name": "Temperatuur",
+      "isOn": true
+    }
+  ]
+}

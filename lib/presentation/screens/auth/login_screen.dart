@@ -234,8 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                     Navigator.pop(context);
-                    debugPrint(
-                        "--------- Removing the Progress Indicator ----------");
+                    debugPrint("--------- Loader Popped ----------");
                     switch (authState.loginState) {
                       case LoginState.userNotFound:
                         setState(() {
@@ -252,13 +251,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       case LoginState.success:
                         {
                           debugPrint("Login");
-                          // print("User Logged In Successfully");
-                          // SchedulerBinding.instance!
-                          //     .addPostFrameCallback((_) async {
-                          //   Navigator.of(context).pushNamedAndRemoveUntil(
-                          //       PagePath.landingPage,
-                          //       (Route<dynamic> route) => false);
-                          // });
                         }
                         break;
                       default:

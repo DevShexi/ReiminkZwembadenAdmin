@@ -32,6 +32,10 @@ class Strings {
   static const dashboard = "Dashboard";
   static const clients = "Klanten";
   static const requests = "Verzoeken";
+  static const rejectedClients = "Afgewezen klanten";
+  static const approvedClientType = "approved";
+  static const rejectedClientType = "rejected";
+  static const requestClientType = "request";
   static const settings = "Instellingen";
   static const accept = "Aanvaarden";
   static const decline = "Afwijzen";
@@ -39,6 +43,10 @@ class Strings {
   static const cancel = "Annuleren";
   static const logoutPromptMessage =
       "U wordt uitgelogd van de admin-app. Doorgaan?";
+  static const labelRetry = "Vernieuwen";
+  static const duplicate = "Duplicaat";
+  static const edit = "Bewerk";
+  static const delete = "Verwijderen";
 
   static const dummyImage =
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60";

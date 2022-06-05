@@ -5,4 +5,5 @@ class PagePath {
   static const register = "register";
   static const verifyEmail = "verifyEmail";
   static const landingPage = "landingPage";
+  static const poolsListingScreen = "poolsListingScreen";
 }

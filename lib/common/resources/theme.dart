@@ -56,7 +56,7 @@ class AppTheme {
     final ThemeData theme = ThemeData(
       fontFamily: GoogleFonts.poppins().fontFamily,
       brightness: Brightness.light,
-      primarySwatch: Colors.green,
+      primarySwatch: Colors.blue,
       canvasColor: AppColors.white,
       dividerColor: AppColors.primary,
       snackBarTheme: const SnackBarThemeData(
@@ -64,6 +64,9 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
       ),
       appBarTheme: const AppBarTheme(
+        iconTheme: IconThemeData(
+          color: AppColors.primary, //change your color here
+        ),
         elevation: 1.0,
         centerTitle: true,
         backgroundColor: AppColors.white,
