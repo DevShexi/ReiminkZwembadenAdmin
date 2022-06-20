@@ -10,7 +10,7 @@ Clients? clients;
 final clientsProvider = FutureProvider.autoDispose
     .family<List<Client>, String>((ref, clientType) async {
   final content = json.decode(
-    await rootBundle.loadString('assets/mockJsonResponses/clients.json'),
+    await rootBundle.loadString('assets/json/clients.json'),
   ) as Map<String, Object?>;
   final List<Client> response = [];
   final clients = Clients.fromJson(content);

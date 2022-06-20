@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reimink_zwembaden_admin/common/resources/colors.dart';
-import 'package:reimink_zwembaden_admin/common/resources/strings.dart';
+import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 import 'package:reimink_zwembaden_admin/data/models/pools_listing_screen_args.dart';
 
 class PoolsListingScreen extends StatefulWidget {
@@ -30,6 +29,13 @@ class _PoolsListingScreenState extends State<PoolsListingScreen> {
               ),
               elevation: 3.0,
               child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    PagePath.addPool,
+                    arguments: args,
+                  );
+                },
                 child: Container(
                   padding: const EdgeInsets.all(2.0),
                   decoration: BoxDecoration(

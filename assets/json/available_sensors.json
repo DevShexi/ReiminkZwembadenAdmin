@@ -1,0 +1,52 @@
+{
+  "availableSensors": [
+    {
+      "sensor_name": "Vrij Chloor",
+      "mqtt_topic": "",
+      "icon_url": "assets/svg/chlorine_blue.svg",
+      "max_sensor_count": 6
+    },
+    {
+      "sensor_name": "Gebonden chloor",
+      "mqtt_topic": "",
+      "icon_url": "assets/svg/chlorine_pink.svg",
+      "max_sensor_count": 6
+    },
+    {
+      "sensor_name": "pH",
+      "mqtt_topic": "",
+      "icon_url": "assets/svg/ph.svg",
+      "max_sensor_count": 6
+    },
+    {
+      "sensor_name": "Temperatuur",
+      "mqtt_topic": "",
+      "icon_url": "assets/svg/temp.svg",
+      "max_sensor_count": 6
+    },
+    {
+      "sensor_name": "Druk Filter",
+      "mqtt_topic": "",
+      "icon_url": null,
+      "max_sensor_count": 6
+    },
+    {
+      "sensor_name": "Flow",
+      "mqtt_topic": "",
+      "icon_url": null,
+      "max_sensor_count": 6
+    },
+    {
+      "sensor_name": "Niveau buffer kelder",
+      "mqtt_topic": "",
+      "icon_url": null,
+      "max_sensor_count": 6
+    },
+    {
+      "sensor_name": "Niveau spoelwater kelder",
+      "mqtt_topic": "",
+      "icon_url": null,
+      "max_sensor_count": 6
+    }
+  ]
+}

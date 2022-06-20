@@ -7,9 +7,13 @@ import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 import 'package:reimink_zwembaden_admin/firebase_options.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/auth/login_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/auth/register_screen.dart';
+import 'package:reimink_zwembaden_admin/presentation/screens/home/clients/clients_screen.dart';
+import 'package:reimink_zwembaden_admin/presentation/screens/home/settings/add_sensor_screen.dart';
+import 'package:reimink_zwembaden_admin/presentation/screens/home/settings/sensors_listing_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/landing/landing_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/auth/verifyEmail/verify_email_screen.dart';
-import 'package:reimink_zwembaden_admin/presentation/widgets/clients/pools/pools_listing_screen.dart';
+import 'presentation/screens/home/clients/pools/add_pool_screen.dart';
+import 'presentation/screens/home/clients/pools/pools_listing_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +41,11 @@ class MyApp extends StatelessWidget {
         PagePath.register: (context) => const RegisterScreen(),
         PagePath.verifyEmail: (context) => const VerifyEmailScreen(),
         PagePath.landingPage: (context) => const LandingPage(),
-        PagePath.poolsListingScreen: (context) => const PoolsListingScreen(),
+        PagePath.poolsListing: (context) => const PoolsListingScreen(),
+        PagePath.addPool: (context) => const AddPoolScreen(),
+        PagePath.addSensor: (context) => const AddSensorScreen(),
+        PagePath.clients: (context) => const ClientsScreen(),
+        PagePath.sensors: (context) => const SensorsListingScreen(),
       },
       theme: AppTheme.light(),
       // home: const HomeScreen(),

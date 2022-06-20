@@ -42,13 +42,13 @@ class ClientDisplayTile extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: AppStyles.title,
+                  style: AppStyles.title2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 5.0),
                 Text(
                   email,
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: AppStyles.subtitle,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

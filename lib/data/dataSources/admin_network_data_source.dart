@@ -7,6 +7,8 @@ abstract class AdminNetworkDataSource {
   Future? register(AuthRequest registerRequest);
   Future<bool> forgotPassword(String email);
   Future logout();
+  String? getUserEmail();
+  String? getUserId();
 }
 
 class AdminNetworkDataSourceImpl implements AdminNetworkDataSource {
@@ -34,5 +36,17 @@ class AdminNetworkDataSourceImpl implements AdminNetworkDataSource {
   Future<void> logout() async {
     final response = await _apiClient.logout();
     return response;
+  }
+
+  @override
+  String? getUserEmail() {
+    final String? email = _apiClient.getUserEmail();
+    return email;
+  }
+
+  @override
+  String? getUserId() {
+    final String? uid = _apiClient.getUserId();
+    return uid;
   }
 }

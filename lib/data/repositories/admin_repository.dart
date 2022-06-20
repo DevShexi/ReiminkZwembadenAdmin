@@ -6,6 +6,8 @@ abstract class AdminRepository {
   Future<RegisterResponse> register(AuthRequest registerRequest);
   Future<bool> forgotPassword(String email);
   Future<void> logout();
+  String? getUserEmail();
+  String? getUserId();
 }
 
 class AdminRepositoryImpl implements AdminRepository {
@@ -36,5 +38,17 @@ class AdminRepositoryImpl implements AdminRepository {
   Future<void> logout() async {
     final response = await adminNetworkDataSource.logout();
     return response;
+  }
+
+  @override
+  String? getUserEmail() {
+    final String? email = adminNetworkDataSource.getUserEmail();
+    return email;
+  }
+
+  @override
+  String? getUserId() {
+    final String? uid = adminNetworkDataSource.getUserId();
+    return uid;
   }
 }

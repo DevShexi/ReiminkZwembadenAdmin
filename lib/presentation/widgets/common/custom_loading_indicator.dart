@@ -7,10 +7,12 @@ class CustomLoadingIndicator extends StatelessWidget {
     required this.width,
     required this.height,
     this.radius,
+    this.child,
   }) : super(key: key);
   final double width;
   final double height;
   final double? radius;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class CustomLoadingIndicator extends StatelessWidget {
       ),
       height: height,
       width: width,
+      child: child,
     );
   }
 }

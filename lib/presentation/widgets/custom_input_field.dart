@@ -10,6 +10,8 @@ class CustomInputField extends StatelessWidget {
     this.hintText,
     this.suffixIcon,
     this.errorText,
+    this.focusNode,
+    this.validator,
     required this.isObscure,
   }) : super(key: key);
   final String label;
@@ -19,6 +21,8 @@ class CustomInputField extends StatelessWidget {
   final bool isObscure;
   final Widget? suffixIcon;
   final String? errorText;
+  final FocusNode? focusNode;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,9 @@ class CustomInputField extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(7),
-        color: errorText == null ? AppColors.lightGrey : AppColors.errorLight,
+        color: errorText == null
+            ? AppColors.lightGrey
+            : AppColors.errorLight.withOpacity(0.5),
         border: Border.all(
           color: errorText == null ? AppColors.lightBlue : AppColors.error,
           width: 1.0,
@@ -48,25 +54,28 @@ class CustomInputField extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 label,
-                style: const TextStyle(
-                  color: AppColors.blue,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+                style: AppStyles.smallLabel.copyWith(
+                  color: AppColors.primary,
                 ),
               ),
             ],
           ),
           TextFormField(
+            validator: validator,
+            focusNode: focusNode,
             obscureText: isObscure,
             controller: controller,
+            style: AppStyles.textField,
             decoration: InputDecoration(
               errorText: errorText,
+              errorStyle: AppStyles.error,
               suffixIcon: suffixIcon,
               suffixIconConstraints:
                   const BoxConstraints.tightFor(width: 30, height: 30),
               isDense: true,
               border: InputBorder.none,
               hintText: hintText,
+              hintStyle: AppStyles.hint,
             ),
           ),
         ],

@@ -38,24 +38,16 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 7,
               ),
-              const Text(
+              Text(
                 Strings.tagline,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.normal,
-                  color: AppColors.black,
-                ),
+                style: AppStyles.subtitle,
               ),
               const SizedBox(
                 height: 46,
               ),
-              const Text(
+              Text(
                 Strings.login,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.black,
-                ),
+                style: AppStyles.heading2black,
               ),
               const SizedBox(
                 height: 46,
@@ -188,14 +180,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const <Widget>[
+                  children: <Widget>[
                     Text(
                       Strings.forgotPassword,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
+                      style: AppStyles.subtitle,
                     )
                   ],
                 ),
@@ -263,13 +251,9 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     Strings.dontHaveAnAccount,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.black,
-                    ),
+                    style: AppStyles.subtitle,
                   ),
                   const SizedBox(
                     width: 10,
@@ -278,15 +262,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () {
                       Navigator.popAndPushNamed(context, PagePath.register);
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
                         Strings.registerHere,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
+                        style: AppStyles.subHeadingBlack,
                       ),
                     ),
                   ),
