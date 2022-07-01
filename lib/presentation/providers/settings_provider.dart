@@ -52,15 +52,9 @@ final addNewSensorNotifierProvider =
   ),
 );
 
-final sensorsProvider = FutureProvider.autoDispose(
+final sensorsSnapshotProvider = StreamProvider.autoDispose(
   (ref) {
-    return GetIt.I<SettingsRepository>().getAllSensors();
-  },
-);
-
-final sensorCountProvider = FutureProvider.autoDispose(
-  (ref) {
-    return GetIt.I<SettingsRepository>().getAllSensorsCount();
+    return GetIt.I<SettingsRepository>().getSensorsSnapshot();
   },
 );
 

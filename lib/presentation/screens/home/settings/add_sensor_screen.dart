@@ -84,7 +84,7 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
           iconPath = null;
         });
         Navigator.pop(context, false);
-        ref.refresh(sensorCountProvider);
+        ref.refresh(sensorsSnapshotProvider);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(Strings.sensorAddedSuccessMessage),
@@ -220,6 +220,7 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                             CustomCounter(
                               size: const Size(34, 34),
                               controller: _sensorCounterController,
+                              onChanged: (value) {},
                               onDecrement: decreaseCount,
                               onIncrement: increaseCount,
                               active: true,

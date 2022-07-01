@@ -1,13 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:reimink_zwembaden_admin/data/dataSources/data_sources.dart';
 import 'package:reimink_zwembaden_admin/data/models/available_sensors.dart';
 
 abstract class SettingsRepository {
   Future<void> addNewSensor(Sensor newSensor);
   Future<String?> uploadSensorIconToStorage(File image);
-  Future<List<Sensor>> getAllSensors();
-  Future<int> getAllSensorsCount();
+  Stream<QuerySnapshot> getSensorsSnapshot();
 }
 
 class SettingsRepositoryImpl implements SettingsRepository {
@@ -29,13 +29,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
-  Future<List<Sensor>> getAllSensors() async {
-    final sensors = await settingsNetworkDataSource.getAllSensors();
-    return sensors;
-  }
-
-  @override
-  Future<int> getAllSensorsCount() async {
-    return await settingsNetworkDataSource.getAllSensorsCount();
+  Stream<QuerySnapshot> getSensorsSnapshot() {
+    return settingsNetworkDataSource.getSensorsSnapshot();
   }
 }

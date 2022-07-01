@@ -1,34 +1,77 @@
 {
   "project_info": {
-    "project_number": "738201020981",
-    "project_id": "reiminkzwembadenadmin",
-    "storage_bucket": "reiminkzwembadenadmin.appspot.com"
+    "project_number": "132159591780",
+    "project_id": "meetwaterdata",
+    "storage_bucket": "meetwaterdata.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:738201020981:android:4e33999736b0229b60df7c",
+        "mobilesdk_app_id": "1:132159591780:android:fe9cbc69d0421759119671",
         "android_client_info": {
-          "package_name": "com.example.reimink_zwembaden_admin"
+          "package_name": "com.example.reimink_zwembaden"
         }
       },
       "oauth_client": [
         {
-          "client_id": "738201020981-7bsngko9qni73lllrb77r96sk1lge1ot.apps.googleusercontent.com",
+          "client_id": "132159591780-iev07qcrci3pqmkco78p8s0o9l168lc9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCMxSV6Rz2hUwiumCDivde8kjuDSsQxyCs"
+          "current_key": "AIzaSyACLp2881f4DSvpQVq7x0bWT-OttqAafZw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "738201020981-7bsngko9qni73lllrb77r96sk1lge1ot.apps.googleusercontent.com",
+              "client_id": "132159591780-iev07qcrci3pqmkco78p8s0o9l168lc9.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "132159591780-pct7p56j5ds6egb55v9cmcu5nh2hncjo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.reiminkZwembadenAdmin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132159591780:android:3ea4f4854838bf33119671",
+        "android_client_info": {
+          "package_name": "com.example.reimink_zwembaden_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132159591780-iev07qcrci3pqmkco78p8s0o9l168lc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACLp2881f4DSvpQVq7x0bWT-OttqAafZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132159591780-iev07qcrci3pqmkco78p8s0o9l168lc9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "132159591780-pct7p56j5ds6egb55v9cmcu5nh2hncjo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.reiminkZwembadenAdmin"
+              }
             }
           ]
         }

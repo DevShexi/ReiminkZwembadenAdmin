@@ -12,13 +12,17 @@ class SensorsListingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sensors = ref.watch(sensorsProvider);
+    final sensors = ref.watch(sensorsSnapshotProvider);
     return sensors.when(
-      data: (data) => SensorsList(sensors: data),
+      data: (data) => SensorsList(
+          sensors: data.docs.map((e) {
+        final json = e.data() as Map<String, dynamic>;
+        return Sensor.fromJson(json);
+      }).toList()),
       error: (error, stack) => ErrorScreen(
         error: error.toString(),
         onRefresh: () {
-          ref.refresh(sensorsProvider);
+          ref.refresh(sensorsSnapshotProvider);
         },
       ),
       loading: () => const SensorsListLoader(),

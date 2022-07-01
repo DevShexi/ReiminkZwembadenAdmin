@@ -25,7 +25,7 @@ class SettingsScreen extends ConsumerWidget {
         );
       } else if (screenState.stateType == StateType.success) {}
     });
-    final sensorCount = ref.watch(sensorCountProvider);
+    final sensorCount = ref.watch(sensorsSnapshotProvider);
     return Stack(
       children: [
         Scaffold(
@@ -153,7 +153,7 @@ class SettingsScreen extends ConsumerWidget {
                     sensorCount.when(
                       data: (data) => Expanded(
                         child: SettingsCard(
-                          stat: data.toString(),
+                          stat: data.docs.length.toString(),
                           label: Strings.sensors,
                           actionLabel: Strings.add,
                           addNewaction: () {

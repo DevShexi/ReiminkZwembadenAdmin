@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reimink_zwembaden_admin/data/models/available_sensors.dart';
 import 'package:reimink_zwembaden_admin/network/api_client.dart';
@@ -6,8 +7,7 @@ import 'package:reimink_zwembaden_admin/network/api_client.dart';
 abstract class SettingsNetworkDataSource {
   Future<void> addNewSensor(Sensor newSensor);
   Future<String?> uploadSensorIconToStorage(File image);
-  Future<List<Sensor>> getAllSensors();
-  Future<int> getAllSensorsCount();
+  Stream<QuerySnapshot> getSensorsSnapshot();
 }
 
 class SettingsNetworkDataSourceImpl implements SettingsNetworkDataSource {
@@ -26,13 +26,7 @@ class SettingsNetworkDataSourceImpl implements SettingsNetworkDataSource {
   }
 
   @override
-  Future<List<Sensor>> getAllSensors() async {
-    final sensors = await apiClient.getAllSensors();
-    return sensors;
-  }
-
-  @override
-  Future<int> getAllSensorsCount() async {
-    return await apiClient.getAllSensorsCount();
+  Stream<QuerySnapshot> getSensorsSnapshot() {
+    return apiClient.getSensorsSnapshot();
   }
 }

@@ -9,10 +9,12 @@ class CustomCounter extends StatelessWidget {
     required this.controller,
     required this.onDecrement,
     required this.onIncrement,
+    required this.onChanged,
     required this.active,
     this.size,
   }) : super(key: key);
   final TextEditingController controller;
+  final Function(String value) onChanged;
   final Function() onIncrement;
   final Function() onDecrement;
   final bool active;
@@ -34,6 +36,7 @@ class CustomCounter extends StatelessWidget {
             width: size != null ? size!.width * 1.24 : 35,
             height: size != null ? size!.height : 24,
             child: TextFormField(
+              onChanged: onChanged,
               controller: controller,
               enableInteractiveSelection: false,
               cursorColor: AppColors.textGrey.withOpacity(0.5),
@@ -59,7 +62,7 @@ class CustomCounter extends StatelessWidget {
                 FilteringTextInputFormatter.allow(
                   RegExp(r'[1-9]'),
                 ),
-                LengthLimitingTextInputFormatter(1),
+                // LengthLimitingTextInputFormatter(1),
               ],
               textAlign: TextAlign.center,
               textAlignVertical: TextAlignVertical.center,

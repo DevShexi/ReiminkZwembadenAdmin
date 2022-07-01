@@ -17,13 +17,19 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -46,31 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDb9QJYxU7zmt1atubf6FogIzM-9lD5FdA',
-    appId: '1:738201020981:web:df3f76a83906ae9360df7c',
-    messagingSenderId: '738201020981',
-    projectId: 'reiminkzwembadenadmin',
-    authDomain: 'reiminkzwembadenadmin.firebaseapp.com',
-    storageBucket: 'reiminkzwembadenadmin.appspot.com',
-    measurementId: 'G-RK6M448X8E',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCMxSV6Rz2hUwiumCDivde8kjuDSsQxyCs',
-    appId: '1:738201020981:android:4e33999736b0229b60df7c',
-    messagingSenderId: '738201020981',
-    projectId: 'reiminkzwembadenadmin',
-    storageBucket: 'reiminkzwembadenadmin.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBTbNUqM03eqlcHtoTfEhgzCj8IkfhL7zk',
-    appId: '1:738201020981:ios:d3c8ff04dc36db6f60df7c',
-    messagingSenderId: '738201020981',
-    projectId: 'reiminkzwembadenadmin',
-    storageBucket: 'reiminkzwembadenadmin.appspot.com',
-    iosClientId: '738201020981-99df87i7qiav6ta6rrsftchodab56r3j.apps.googleusercontent.com',
-    iosBundleId: 'com.example.reiminkZwembadenAdmin',
+    apiKey: 'AIzaSyACLp2881f4DSvpQVq7x0bWT-OttqAafZw',
+    appId: '1:132159591780:android:3ea4f4854838bf33119671',
+    messagingSenderId: '132159591780',
+    projectId: 'meetwaterdata',
+    storageBucket: 'meetwaterdata.appspot.com',
   );
 }

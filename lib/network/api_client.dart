@@ -18,8 +18,7 @@ abstract class ApiClient {
   String? getUserEmail();
   String? getUserId();
   Future<String?> uploadSensorIconToStorage(File image);
-  Future getAllSensors();
-  Future<int> getAllSensorsCount();
+  Stream<QuerySnapshot> getSensorsSnapshot();
   FirebaseAuth? firebaseAuth;
   FirebaseStorage? firebaseStorage;
   FirebaseFirestore? firebaseFirestore;
@@ -164,30 +163,39 @@ class ApiClientImpl implements ApiClient {
   }
 
   @override
-  Future<List<Sensor?>> getAllSensors() async {
-    final List<Sensor> sensors = [];
-    await firebaseFirestore!.collection("sensors").get().then(
-      (value) {
-        for (var element in value.docs) {
-          sensors.add(
-            Sensor.fromJson(
-              element.data(),
-            ),
-          );
-        }
-      },
-    );
-    return sensors;
+  Stream<QuerySnapshot<Map<String, dynamic>>> getSensorsSnapshot() {
+    return firebaseFirestore!.collection("sensors").snapshots();
   }
 
-  @override
-  Future<int> getAllSensorsCount() async {
-    int count = 0;
-    await firebaseFirestore!.collection("sensors").get().then(
-      (value) {
-        count = value.docs.length;
-      },
-    );
-    return count;
-  }
+  // @override
+  // Future<List<Sensor?>> getAllSensors() async {
+  //   final List<Sensor> sensors = [];
+  //   await firebaseFirestore!.collection("sensors").get().then(
+  //     (value) {
+  //       for (var element in value.docs) {
+  //         sensors.add(
+  //           Sensor.fromJson(
+  //             element.data(),
+  //           ),
+  //         );
+  //       }
+  //     },
+  //   );
+  //   return sensors;
+  // }
+
+  // @override
+  // Future<int> getAllSensorsCount() async {
+  //   final Stream<int> sensorCount;
+  //   firebaseFirestore!.collection("sensors").snapshots().listen((event) {
+  //     print(event.docs.length);
+  //   });
+  //   int count = 0;
+  //   await firebaseFirestore!.collection("sensors").get().then(
+  //     (value) {
+  //       count = value.docs.length;
+  //     },
+  //   );
+  //   return count;
+  // }
 }

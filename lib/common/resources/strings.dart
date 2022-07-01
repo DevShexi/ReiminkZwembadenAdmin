@@ -63,6 +63,9 @@ class Strings {
   static const duplicate = "Duplicaat";
   static const edit = "Bewerk";
   static const delete = "Verwijderen";
+  static const maxSelected = "Maximaal geselecteerd";
+  static const poolName = "Naam zwembad";
+  static const poolTopic = "Zwembad onderwerp";
 
   //Add Sensor Screen
   static const sensorName = "Sensornaam";
