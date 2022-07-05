@@ -1,6 +1,10 @@
 class Strings {
   Strings._();
 
+  static const rejectedStatus = "rejected";
+  static const pendingStatus = "pending";
+  static const approvedStatus = "approved";
+
   // Login Page
   static const tagline = "zwembaden | wellness | waterfun";
   static const login = "Inloggen";
@@ -50,6 +54,7 @@ class Strings {
   static const requestClientType = "request";
   static const accept = "Aanvaarden";
   static const decline = "Afwijzen";
+  static const noClients = "Geen data gevonden";
 
   //Settings Screen
   static const adminSettings = "Beheerdersinstellingen";
@@ -76,6 +81,10 @@ class Strings {
   static const cropImage = "Afbeelding bijsnijden";
   static const sensorAddedSuccessMessage =
       "De sensor is succesvol toegevoegd aan de Firebase";
+  static const enableSetValue = "'set' waarde inschakelen";
+  static const setTopic = "onderwerp 'set'";
+  static const minSet = "Min 'set'";
+  static const maxSet = "Max 'set'";
 
   // Sensor Listing Screen
   static const topic = "onderwerp";

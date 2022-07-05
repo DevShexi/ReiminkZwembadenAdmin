@@ -18,6 +18,9 @@ class AddNewSensorNotifier extends StateNotifier<ScreenState> {
     required String mqttTopic,
     required int? maxSensorCount,
     String? iconPath,
+    String? setTopic,
+    double? minSet,
+    double? maxSet,
   }) async {
     String? downloadUrl;
     state = ScreenState.loading();
@@ -31,6 +34,9 @@ class AddNewSensorNotifier extends StateNotifier<ScreenState> {
         sensorName: sensorName,
         mqttTopic: mqttTopic,
         maxSensorCount: maxSensorCount,
+        setTopic: setTopic,
+        minSet: minSet,
+        maxSet: maxSet,
         iconUrl: downloadUrl,
       );
       await settingsRepository.addNewSensor(newSensor);

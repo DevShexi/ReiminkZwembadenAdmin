@@ -1,15 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'available_sensors.g.dart';
-
-@JsonSerializable()
-class Sensors {
-  const Sensors({required this.sensors});
-  final List<Sensor> sensors;
-
-  factory Sensors.fromJson(Map<String, dynamic> json) =>
-      _$SensorsFromJson(json);
-  Map<String, dynamic> toJson() => _$SensorsToJson(this);
-}
+part 'sensor.g.dart';
 
 @JsonSerializable(
   fieldRename: FieldRename.snake,
@@ -18,11 +8,17 @@ class Sensor {
   const Sensor({
     required this.sensorName,
     required this.mqttTopic,
+    this.setTopic,
+    this.minSet,
+    this.maxSet,
     this.iconUrl,
     this.maxSensorCount,
   });
   final String sensorName;
   final String mqttTopic;
+  final String? setTopic;
+  final double? minSet;
+  final double? maxSet;
   final String? iconUrl;
   final int? maxSensorCount;
 

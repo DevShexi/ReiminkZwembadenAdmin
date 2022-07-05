@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/colors.dart';
 import 'package:reimink_zwembaden_admin/common/resources/strings.dart';
-import 'package:reimink_zwembaden_admin/data/models/available_sensors.dart';
+import 'package:reimink_zwembaden_admin/data/models/sensor.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/settings_provider.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/error/error_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/settings/sensor_listing_tile.dart';

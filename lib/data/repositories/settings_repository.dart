@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:reimink_zwembaden_admin/data/dataSources/data_sources.dart';
-import 'package:reimink_zwembaden_admin/data/models/available_sensors.dart';
+import 'package:reimink_zwembaden_admin/data/models/sensor.dart';
 
 abstract class SettingsRepository {
   Future<void> addNewSensor(Sensor newSensor);

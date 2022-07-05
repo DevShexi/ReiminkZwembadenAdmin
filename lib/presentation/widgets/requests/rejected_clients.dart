@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
+import 'package:reimink_zwembaden_admin/data/models/network/clients.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/providers.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/error/error_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/requests/rejected_client_display_tile.dart';
@@ -14,17 +15,29 @@ class RegectedClients extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final requests = ref.watch(clientsProvider(type));
+    final requests = ref.watch(clientsSnapshotProvider);
     return requests.when(data: (data) {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: data.length,
-        itemBuilder: (context, index) => RejectedClientDisplayTile(
-          name: data[index].name,
-          email: data[index].email,
-          imageUrl: data[index].imageUrl ?? Strings.dummyImage,
-        ),
-      );
+      final List<Client> rejectedClients = [];
+      if (data.docs.isNotEmpty) {
+        for (var client in data.docs) {
+          if (client['status'] == Strings.rejectedStatus) {
+            rejectedClients.add(Client.fromJson(client.data()));
+          }
+        }
+      }
+      return rejectedClients.isNotEmpty
+          ? ListView.builder(
+              shrinkWrap: true,
+              itemCount: rejectedClients.length,
+              itemBuilder: (context, index) => RejectedClientDisplayTile(
+                client: rejectedClients[index],
+              ),
+            )
+          : const Center(
+              child: Text(
+                Strings.noClients,
+              ),
+            );
     }, error: (err, trace) {
       return ErrorScreen(
         error: err.toString(),

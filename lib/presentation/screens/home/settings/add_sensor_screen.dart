@@ -7,7 +7,7 @@ import 'package:reimink_zwembaden_admin/common/resources/colors.dart';
 import 'package:reimink_zwembaden_admin/common/resources/strings.dart';
 import 'package:reimink_zwembaden_admin/common/utils/image_picker_utils.dart';
 import 'package:reimink_zwembaden_admin/common/utils/validators.dart';
-import 'package:reimink_zwembaden_admin/data/models/available_sensors.dart';
+import 'package:reimink_zwembaden_admin/data/models/sensor.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/settings_repository.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/providers.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/settings_provider.dart';
@@ -27,16 +27,23 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
   final TextEditingController _sensorCounterController =
       TextEditingController(text: "1");
   final TextEditingController _sensorNameController = TextEditingController();
+  final TextEditingController _setTopicController = TextEditingController();
+  final TextEditingController _minSetController = TextEditingController();
+  final TextEditingController _maxSetController = TextEditingController();
   final TextEditingController _mqttTopicController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final SettingsRepository settingsRepository = GetIt.I<SettingsRepository>();
   String? iconPath;
+  bool enableSet = false;
 
   @override
   void dispose() {
     _sensorCounterController.dispose();
     _sensorNameController.dispose();
     _mqttTopicController.dispose();
+    _setTopicController.dispose();
+    _minSetController.dispose();
+    _maxSetController.dispose();
     super.dispose();
   }
 
@@ -99,7 +106,7 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
     return Stack(
       children: [
         Scaffold(
-          resizeToAvoidBottomInset: false,
+          // resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text(
               Strings.addSensor,
@@ -118,6 +125,7 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(
@@ -141,63 +149,118 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                               validator: InputValidator.requiredFieldValidator,
                             ),
                             const SizedBox(
-                              height: 15.0,
+                              height: 10.0,
                             ),
                             Row(
                               children: [
-                                Text(
-                                  Strings.uploadSensorIcon,
-                                  style: Theme.of(context).textTheme.bodyText2,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5.0,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 70,
-                                  height: 70,
-                                  color: Colors.transparent,
-                                  child: Material(
-                                    color: AppColors.lightBlue,
-                                    shadowColor: AppColors.blue,
-                                    elevation: 3.0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        7.0,
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.lightGrey,
+                                      border: Border.all(
+                                        width: 1,
+                                        color: AppColors.lightBlue,
                                       ),
+                                      borderRadius: BorderRadius.circular(7.0),
                                     ),
-                                    child: InkWell(
-                                      onTap: pickSensorIconFromGallery,
-                                      splashColor:
-                                          AppColors.primary.withOpacity(
-                                        0.5,
-                                      ),
-                                      highlightColor:
-                                          AppColors.primary.withOpacity(
-                                        0.5,
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                        7.0,
-                                      ),
-                                      child: iconPath != null
-                                          ? ClipRRect(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(Strings.uploadSensorIcon,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2),
+                                        const SizedBox(height: 5.0),
+                                        Container(
+                                          width: 70,
+                                          height: 70,
+                                          color: Colors.transparent,
+                                          child: Material(
+                                            color: AppColors.lightBlue,
+                                            shadowColor: AppColors.blue,
+                                            elevation: 3.0,
+                                            shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(
                                                 7.0,
                                               ),
-                                              child: Image.file(
-                                                File(iconPath!),
-                                              ),
-                                            )
-                                          : const Center(
-                                              child: Icon(
-                                                Icons.add_a_photo,
-                                                color: AppColors.blue,
-                                              ),
                                             ),
+                                            child: InkWell(
+                                              onTap: pickSensorIconFromGallery,
+                                              splashColor:
+                                                  AppColors.primary.withOpacity(
+                                                0.5,
+                                              ),
+                                              highlightColor:
+                                                  AppColors.primary.withOpacity(
+                                                0.5,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                7.0,
+                                              ),
+                                              child: iconPath != null
+                                                  ? ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        7.0,
+                                                      ),
+                                                      child: Image.file(
+                                                        File(iconPath!),
+                                                      ),
+                                                    )
+                                                  : const Center(
+                                                      child: Icon(
+                                                        Icons.add_a_photo,
+                                                        color: AppColors.blue,
+                                                      ),
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10.0),
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.lightGrey,
+                                      border: Border.all(
+                                        width: 1,
+                                        color: AppColors.lightBlue,
+                                      ),
+                                      borderRadius: BorderRadius.circular(7.0),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(Strings.maxSensorCount,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2),
+                                        const SizedBox(height: 5.0),
+                                        SizedBox(
+                                          height: 70,
+                                          child: Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: CustomCounter(
+                                              size: const Size(34, 34),
+                                              controller:
+                                                  _sensorCounterController,
+                                              onChanged: (value) {},
+                                              onDecrement: decreaseCount,
+                                              onIncrement: increaseCount,
+                                              active: true,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -208,22 +271,76 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                             ),
                             Row(
                               children: [
-                                Text(
-                                  Strings.maxSensorCount,
-                                  style: Theme.of(context).textTheme.bodyText2,
-                                ),
+                                Checkbox(
+                                    value: enableSet,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        enableSet = value ?? false;
+                                      });
+                                    }),
+                                const Text(Strings.enableSetValue),
                               ],
                             ),
-                            const SizedBox(
-                              height: 5.0,
+                            Opacity(
+                              opacity: enableSet ? 1 : 0.5,
+                              child: AbsorbPointer(
+                                absorbing: !enableSet,
+                                child: Column(
+                                  children: [
+                                    CustomInputField(
+                                        disabled: !enableSet,
+                                        label: Strings.setTopic,
+                                        isObscure: false,
+                                        icon: Icons.sensors,
+                                        controller: _setTopicController,
+                                        validator: enableSet
+                                            ? InputValidator
+                                                .requiredFieldValidator
+                                            : InputValidator.clear),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Flexible(
+                                          child: CustomInputField(
+                                            disabled: !enableSet,
+                                            label: Strings.minSet,
+                                            isObscure: false,
+                                            icon: Icons.sensors,
+                                            controller: _minSetController,
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(),
+                                            validator: enableSet
+                                                ? InputValidator
+                                                    .requiredFieldValidator
+                                                : InputValidator.clear,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10.0),
+                                        Flexible(
+                                          child: CustomInputField(
+                                            disabled: !enableSet,
+                                            label: Strings.maxSet,
+                                            isObscure: false,
+                                            icon: Icons.sensors,
+                                            controller: _maxSetController,
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(),
+                                            validator: enableSet
+                                                ? InputValidator
+                                                    .requiredFieldValidator
+                                                : InputValidator.clear,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                            CustomCounter(
-                              size: const Size(34, 34),
-                              controller: _sensorCounterController,
-                              onChanged: (value) {},
-                              onDecrement: decreaseCount,
-                              onIncrement: increaseCount,
-                              active: true,
+                            const SizedBox(
+                              height: 15.0,
                             ),
                           ],
                         ),
@@ -238,17 +355,17 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                               .addSensor(
                                 sensorName: _sensorNameController.text,
                                 mqttTopic: _mqttTopicController.text,
+                                setTopic: _setTopicController.text,
+                                minSet: _minSetController.text.trim().isNotEmpty
+                                    ? double.parse(_minSetController.text)
+                                    : null,
+                                maxSet: _maxSetController.text.trim().isNotEmpty
+                                    ? double.parse(_minSetController.text)
+                                    : null,
                                 maxSensorCount:
                                     int.parse(_sensorCounterController.text),
                                 iconPath: iconPath,
                               );
-                          // final sensor = AvailableSensor(
-                          //   sensorName: _sensorNameController.text,
-                          //   mqttTopic: _mqttTopicController.text,
-                          //   maxSensorCount:
-                          //       int.parse(_sensorCounterController.text),
-                          // );
-                          // await settingsRepository.addNewSensor(sensor);
                         }
                       },
                     ),

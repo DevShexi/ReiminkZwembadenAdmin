@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:reimink_zwembaden_admin/data/dataSources/client_network_data_source.dart';
 import 'package:reimink_zwembaden_admin/data/dataSources/data_sources.dart';
-import 'package:reimink_zwembaden_admin/data/dataSources/local_data_source.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/admin_repository.dart';
+import 'package:reimink_zwembaden_admin/data/repositories/clients_repository.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/settings_repository.dart';
 import 'package:reimink_zwembaden_admin/network/api_client.dart';
 import 'package:get_it/get_it.dart';
@@ -15,9 +16,10 @@ class Injector {
   static void setUpLocator() {
     _setUpApiClient();
     _setUpAdminNetworkDataSource();
+    _setUpClientsNetworkDataSource();
     _setUpSettingsNetworkDataSource();
-    _setUpLocalDataSource();
     _setUpAdminRepository();
+    _setUpClientsRepository();
     _setUpSettingsRepository();
     _setUpFirebaseAuth();
     _setUpFirebaseStorage();
@@ -36,15 +38,15 @@ class Injector {
     );
   }
 
-  static void _setUpSettingsNetworkDataSource() {
-    _dependency.registerFactory<SettingsNetworkDataSource>(
-      () => SettingsNetworkDataSourceImpl(),
+  static void _setUpClientsNetworkDataSource() {
+    _dependency.registerFactory<ClientsNetworkDataSource>(
+      () => ClientsNetworkDataSourceImpl(),
     );
   }
 
-  static void _setUpLocalDataSource() {
-    _dependency.registerFactory<LocalDataSource>(
-      () => LocalDataSourceImpl(),
+  static void _setUpSettingsNetworkDataSource() {
+    _dependency.registerFactory<SettingsNetworkDataSource>(
+      () => SettingsNetworkDataSourceImpl(),
     );
   }
 
@@ -52,6 +54,14 @@ class Injector {
     _dependency.registerFactory<AdminRepository>(
       () => AdminRepositoryImpl(
         adminNetworkDataSource: _dependency(),
+      ),
+    );
+  }
+
+  static void _setUpClientsRepository() {
+    _dependency.registerFactory<ClientsRepository>(
+      () => ClientsRepositoryImpl(
+        clientsNetworkDataSource: _dependency(),
       ),
     );
   }

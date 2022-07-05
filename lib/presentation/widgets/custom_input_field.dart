@@ -12,6 +12,8 @@ class CustomInputField extends StatelessWidget {
     this.errorText,
     this.focusNode,
     this.validator,
+    this.keyboardType,
+    this.disabled,
     required this.isObscure,
   }) : super(key: key);
   final String label;
@@ -23,6 +25,8 @@ class CustomInputField extends StatelessWidget {
   final String? errorText;
   final FocusNode? focusNode;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
+  final bool? disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +53,13 @@ class CustomInputField extends StatelessWidget {
               Icon(
                 icon,
                 size: 15,
-                color: AppColors.blue,
+                color: disabled == true ? AppColors.grey : AppColors.blue,
               ),
               const SizedBox(width: 8),
               Text(
                 label,
                 style: AppStyles.smallLabel.copyWith(
-                  color: AppColors.primary,
+                  color: disabled == true ? AppColors.grey : AppColors.primary,
                 ),
               ),
             ],
@@ -65,6 +69,7 @@ class CustomInputField extends StatelessWidget {
             focusNode: focusNode,
             obscureText: isObscure,
             controller: controller,
+            keyboardType: keyboardType,
             style: AppStyles.textField,
             decoration: InputDecoration(
               errorText: errorText,

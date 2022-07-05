@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
@@ -9,17 +10,26 @@ import 'package:reimink_zwembaden_admin/presentation/widgets/clients/client_disp
 
 class ClientsScreen extends ConsumerWidget {
   const ClientsScreen({Key? key}) : super(key: key);
+
+  List<Client> getApprovedClients(QuerySnapshot<Map<String, dynamic>> data) {
+    final List<Client> clients = [];
+    for (var element in data.docs) {
+      if (element["status"] == "approved") {
+        clients.add(Client.fromJson(element.data()));
+      }
+    }
+    return clients;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final requests = ref.watch(clientsProvider(
-      Strings.approvedClientType,
-    ));
+    final requests = ref.watch(clientsSnapshotProvider);
     return requests.when(
       loading: () {
         return const LoadingClientsListShimmer();
       },
       data: (data) {
-        return AprovedClientsList(data: data);
+        return AprovedClientsList(data: getApprovedClients(data));
       },
       error: (err, trace) {
         return ErrorScreen(
@@ -59,27 +69,29 @@ class AprovedClientsList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
           horizontal: 16.0,
         ),
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: data.length,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                PagePath.poolsListing,
-                arguments: PoolsListingScreenArgs(
-                  clientName: data[index].name,
-                  clientUid: data[index].id,
+        child: data.isNotEmpty
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: data.length,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      PagePath.poolsListing,
+                      arguments: PoolsListingScreenArgs(
+                        clientName: data[index].clientName,
+                        clientUid: data[index].clientId,
+                      ),
+                    );
+                  },
+                  child: ClientDisplayTile(
+                    client: data[index],
+                  ),
                 ),
-              );
-            },
-            child: ClientDisplayTile(
-              name: data[index].name,
-              email: data[index].email,
-              imageUrl: data[index].imageUrl ?? Strings.dummyImage,
-            ),
-          ),
-        ),
+              )
+            : const Center(
+                child: Text(Strings.noClients),
+              ),
       ),
     );
   }

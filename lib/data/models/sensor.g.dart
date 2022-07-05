@@ -1,24 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'available_sensors.dart';
+part of 'sensor.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Sensors _$SensorsFromJson(Map<String, dynamic> json) => Sensors(
-      sensors: (json['sensors'] as List<dynamic>)
-          .map((e) => Sensor.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$SensorsToJson(Sensors instance) => <String, dynamic>{
-      'sensors': instance.sensors,
-    };
-
 Sensor _$SensorFromJson(Map<String, dynamic> json) => Sensor(
       sensorName: json['sensor_name'] as String,
       mqttTopic: json['mqtt_topic'] as String,
+      setTopic: json['set_topic'] as String?,
+      minSet: (json['min_set'] as num?)?.toDouble(),
+      maxSet: (json['max_set'] as num?)?.toDouble(),
       iconUrl: json['icon_url'] as String?,
       maxSensorCount: json['max_sensor_count'] as int?,
     );
@@ -26,6 +19,9 @@ Sensor _$SensorFromJson(Map<String, dynamic> json) => Sensor(
 Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
       'sensor_name': instance.sensorName,
       'mqtt_topic': instance.mqttTopic,
+      'set_topic': instance.setTopic,
+      'min_set': instance.minSet,
+      'max_set': instance.maxSet,
       'icon_url': instance.iconUrl,
       'max_sensor_count': instance.maxSensorCount,
     };

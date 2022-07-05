@@ -30,6 +30,10 @@ class InputValidator {
     }
     return null;
   }
+
+  static String? clear(String? text) {
+    return null;
+  }
 }
 
 class Validator {

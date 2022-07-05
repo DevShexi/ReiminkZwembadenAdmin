@@ -25,15 +25,17 @@ Map<String, dynamic> _$ClientsToJson(Clients instance) => <String, dynamic>{
     };
 
 Client _$ClientFromJson(Map<String, dynamic> json) => Client(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      email: json['email'] as String,
+      clientId: json['client_id'] as String,
+      clientName: json['client_name'] as String,
+      clientEmail: json['client_email'] as String,
       imageUrl: json['image_url'] as String?,
+      status: json['status'] as String,
     );
 
 Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'email': instance.email,
+      'client_id': instance.clientId,
+      'client_name': instance.clientName,
+      'client_email': instance.clientEmail,
       'image_url': instance.imageUrl,
+      'status': instance.status,
     };

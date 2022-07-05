@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_loading_indicator.dart';
 
 import '../../../common/resources/resources.dart';
 
@@ -123,6 +124,33 @@ class CustomCounterButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomCounterButtonLoader extends StatelessWidget {
+  const CustomCounterButtonLoader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const CustomLoadingIndicator(width: 24, height: 24, radius: 4.0);
+  }
+}
+
+class CustomCounterLoader extends StatelessWidget {
+  const CustomCounterLoader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: const [
+        CustomLoadingIndicator(width: 24, height: 24, radius: 4.0),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4.0),
+          child: CustomLoadingIndicator(width: 35, height: 24, radius: 4.0),
+        ),
+        CustomLoadingIndicator(width: 24, height: 24, radius: 4.0),
+      ],
     );
   }
 }

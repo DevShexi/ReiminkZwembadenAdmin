@@ -5,7 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:reimink_zwembaden_admin/data/models/available_sensors.dart';
+import 'package:reimink_zwembaden_admin/common/resources/strings.dart';
+import 'package:reimink_zwembaden_admin/data/models/sensor.dart';
 import 'package:reimink_zwembaden_admin/data/models/network/network_models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +19,11 @@ abstract class ApiClient {
   String? getUserEmail();
   String? getUserId();
   Future<String?> uploadSensorIconToStorage(File image);
-  Stream<QuerySnapshot> getSensorsSnapshot();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getSensorsSnapshot();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getClientsSnapshot();
+  Future approveClient({required String clientId});
+  Future rejectClient({required String clientId});
+
   FirebaseAuth? firebaseAuth;
   FirebaseStorage? firebaseStorage;
   FirebaseFirestore? firebaseFirestore;
@@ -167,35 +172,22 @@ class ApiClientImpl implements ApiClient {
     return firebaseFirestore!.collection("sensors").snapshots();
   }
 
-  // @override
-  // Future<List<Sensor?>> getAllSensors() async {
-  //   final List<Sensor> sensors = [];
-  //   await firebaseFirestore!.collection("sensors").get().then(
-  //     (value) {
-  //       for (var element in value.docs) {
-  //         sensors.add(
-  //           Sensor.fromJson(
-  //             element.data(),
-  //           ),
-  //         );
-  //       }
-  //     },
-  //   );
-  //   return sensors;
-  // }
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getClientsSnapshot() {
+    return firebaseFirestore!.collection("clients").snapshots();
+  }
 
-  // @override
-  // Future<int> getAllSensorsCount() async {
-  //   final Stream<int> sensorCount;
-  //   firebaseFirestore!.collection("sensors").snapshots().listen((event) {
-  //     print(event.docs.length);
-  //   });
-  //   int count = 0;
-  //   await firebaseFirestore!.collection("sensors").get().then(
-  //     (value) {
-  //       count = value.docs.length;
-  //     },
-  //   );
-  //   return count;
-  // }
+  @override
+  Future approveClient({required String clientId}) async {
+    await firebaseFirestore!.collection("clients").doc(clientId).update(
+      {"status": Strings.approvedStatus},
+    );
+  }
+
+  @override
+  Future rejectClient({required String clientId}) async {
+    await firebaseFirestore!.collection("clients").doc(clientId).update(
+      {"status": Strings.rejectedStatus},
+    );
+  }
 }

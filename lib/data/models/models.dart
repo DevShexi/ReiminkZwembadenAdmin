@@ -1,1 +1,1 @@
-export 'available_sensors.dart';
+export 'sensor.dart';

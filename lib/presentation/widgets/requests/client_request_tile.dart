@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
+import 'package:reimink_zwembaden_admin/data/models/network/clients.dart';
+import 'package:reimink_zwembaden_admin/presentation/providers/providers.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_elevated_button.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_loading_indicator.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_outlined_button.dart';
 
-class ClientRequestTile extends StatelessWidget {
+class ClientRequestTile extends ConsumerWidget {
   const ClientRequestTile({
     Key? key,
-    required this.name,
-    required this.email,
-    this.imageUrl,
+    required this.client,
   }) : super(key: key);
-  final String name;
-  final String email;
-  final String? imageUrl;
+  final Client client;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(7.0),
@@ -36,8 +35,9 @@ class ClientRequestTile extends StatelessWidget {
               CircleAvatar(
                 radius: 29.0,
                 backgroundColor: AppColors.pink,
-                backgroundImage:
-                    imageUrl != null ? NetworkImage(imageUrl!) : null,
+                backgroundImage: client.imageUrl != null
+                    ? NetworkImage(client.imageUrl!)
+                    : null,
               ),
               const SizedBox(
                 width: 10.0,
@@ -47,13 +47,13 @@ class ClientRequestTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      client.clientName,
                       style: AppStyles.title2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 5.0),
                     Text(
-                      email,
+                      client.clientEmail,
                       style: AppStyles.subtitle,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -70,7 +70,11 @@ class ClientRequestTile extends StatelessWidget {
               Expanded(
                 child: CustomOutlinedButton(
                   label: Strings.decline,
-                  onPressed: () {},
+                  onPressed: () {
+                    ref
+                        .read(clientsNotifierProvider.notifier)
+                        .rejectClient(clientId: client.clientId);
+                  },
                 ),
               ),
               const SizedBox(
@@ -79,7 +83,11 @@ class ClientRequestTile extends StatelessWidget {
               Expanded(
                 child: CustomElevatedButton(
                   label: Strings.accept,
-                  onPressed: () {},
+                  onPressed: () {
+                    ref
+                        .read(clientsNotifierProvider.notifier)
+                        .approveClient(clientId: client.clientId);
+                  },
                 ),
               )
             ],

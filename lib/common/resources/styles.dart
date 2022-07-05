@@ -70,6 +70,11 @@ class AppStyles {
     fontSize: 14.0,
     fontWeight: FontWeight.w400,
   );
+  static var smallLabel2 = GoogleFonts.poppins(
+    color: AppColors.blue,
+    fontSize: 12.0,
+    fontWeight: FontWeight.w400,
+  );
   static var error = GoogleFonts.poppins(
     color: AppColors.error,
     fontSize: 12.0,

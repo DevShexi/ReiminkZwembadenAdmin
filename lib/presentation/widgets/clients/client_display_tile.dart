@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:reimink_zwembaden_admin/common/resources/colors.dart';
 import 'package:reimink_zwembaden_admin/common/resources/styles.dart';
+import 'package:reimink_zwembaden_admin/data/models/network/clients.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_loading_indicator.dart';
 
 class ClientDisplayTile extends StatelessWidget {
   const ClientDisplayTile({
     Key? key,
-    required this.name,
-    required this.email,
-    this.imageUrl,
+    required this.client,
   }) : super(key: key);
-  final String name;
-  final String email;
-  final String? imageUrl;
+  final Client client;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,8 @@ class ClientDisplayTile extends StatelessWidget {
           CircleAvatar(
             radius: 29.0,
             backgroundColor: AppColors.pink,
-            backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
+            backgroundImage:
+                client.imageUrl != null ? NetworkImage(client.imageUrl!) : null,
           ),
           const SizedBox(
             width: 10.0,
@@ -41,13 +39,13 @@ class ClientDisplayTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  client.clientName,
                   style: AppStyles.title2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 5.0),
                 Text(
-                  email,
+                  client.clientEmail,
                   style: AppStyles.subtitle,
                   overflow: TextOverflow.ellipsis,
                 ),
