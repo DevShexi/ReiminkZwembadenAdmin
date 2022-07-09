@@ -81,14 +81,24 @@ class Strings {
   static const cropImage = "Afbeelding bijsnijden";
   static const sensorAddedSuccessMessage =
       "De sensor is succesvol toegevoegd aan de Firebase";
+  static const sensorUpdatedSuccessMessage = "De sensor is succesvol geüpdatet";
+  static const sensorDeletedSuccessMessage =
+      "De sensor is succesvol verwijderd";
   static const enableSetValue = "'set' waarde inschakelen";
   static const setTopic = "onderwerp 'set'";
   static const minSet = "Min 'set'";
   static const maxSet = "Max 'set'";
+  static const invalidSetValuesError =
+      "Geef geldige 'set'-waarden op. min 'set' >= 0 && min 'set' < max 'set'.";
 
   // Sensor Listing Screen
   static const topic = "onderwerp";
   static const maximumCount = "Max aantal";
+  static const newSensor = "nieuwe sensor";
+  static const deleteSensor = "Sensor verwijderen";
+  static const deleteSensorPromptMessage =
+      "De sensor wordt verwijderd. Wil je doorgaan?";
+  static const deleteBtnText = "Verwijderen";
 
   static const emptyFieldValidatorErrorMessage = "Dit veld kan niet leeg zijn";
   static const dummyImage =

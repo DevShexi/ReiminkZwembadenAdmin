@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,9 +14,10 @@ abstract class ApiClient {
   Future<bool> forgotPassword(String email);
   Future? logout();
   Future<void>? addNewSensor(Sensor newSensor);
+  Future<void>? updateSensor(String id, Sensor updatedSensor);
+  Future<void>? deleteSensor(String id);
   String? getUserEmail();
   String? getUserId();
-  Future<String?> uploadSensorIconToStorage(File image);
   Stream<QuerySnapshot<Map<String, dynamic>>> getSensorsSnapshot();
   Stream<QuerySnapshot<Map<String, dynamic>>> getClientsSnapshot();
   Future approveClient({required String clientId});
@@ -140,6 +139,32 @@ class ApiClientImpl implements ApiClient {
   }
 
   @override
+  Future<void> updateSensor(String id, Sensor updatedSensor) async {
+    final databaseInstance = FirebaseFirestore.instance;
+    final response = await databaseInstance
+        .collection("sensors")
+        .doc(id)
+        .update(
+          updatedSensor.toJson(),
+        )
+        .then((value) => debugPrint("Sensor Updated"))
+        .catchError((error) => debugPrint("Failed to update sensor: $error"));
+    return response;
+  }
+
+  @override
+  Future<void> deleteSensor(String id) async {
+    final databaseInstance = FirebaseFirestore.instance;
+    final response = await databaseInstance
+        .collection("sensors")
+        .doc(id)
+        .delete()
+        .then((value) => debugPrint("Sensor Deleted Successfully"))
+        .catchError((error) => debugPrint("Failed to delete sensor: $error"));
+    return response;
+  }
+
+  @override
   String? getUserEmail() {
     final String? email = firebaseAuth!.currentUser?.email;
     return email;
@@ -149,22 +174,6 @@ class ApiClientImpl implements ApiClient {
   String? getUserId() {
     final String? uid = firebaseAuth!.currentUser?.email;
     return uid;
-  }
-
-  @override
-  Future<String?> uploadSensorIconToStorage(File image) async {
-    String? downloadUrl;
-    final storageRef = firebaseStorage!.ref();
-    final iconRef = storageRef.child(
-      DateTime.now().toString(),
-    );
-    try {
-      await iconRef.putFile(image);
-      downloadUrl = await iconRef.getDownloadURL();
-    } on FirebaseException catch (e) {
-      debugPrint(e.toString());
-    }
-    return downloadUrl;
   }
 
   @override

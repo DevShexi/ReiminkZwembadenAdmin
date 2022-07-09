@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/providers.dart';
+import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_alert_dialog.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_elevated_button.dart';
-import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_outlined_button.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/loader.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -12,7 +11,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(addNewSensorNotifierProvider, (_, ScreenState screenState) {
+    ref.listen(sensorNotifierProvider, (_, ScreenState screenState) {
       if (screenState.stateType == StateType.error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -38,72 +37,14 @@ class SettingsScreen extends ConsumerWidget {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          7.0,
-                        ),
-                      ),
-                      content: SizedBox(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SvgPicture.asset("assets/svg/alert.svg"),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  Strings.logout,
-                                  style: Theme.of(context).textTheme.headline2,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Text(
-                              Strings.logoutPromptMessage,
-                              style: Theme.of(context).textTheme.bodyText2,
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: CustomOutlinedButton(
-                                    label: Strings.cancel,
-                                    onPressed: () {
-                                      Navigator.pop(context, false);
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10.0,
-                                ),
-                                Expanded(
-                                  child: CustomElevatedButton(
-                                    label: Strings.logout,
-                                    onPressed: () {
-                                      ref
-                                          .watch(
-                                              logOutNotifierProvider.notifier)
-                                          .logout();
-                                      Navigator.pop(context, false);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
+                    builder: (context) => CustomAlertDialog(
+                      label: Strings.logout,
+                      promptMessage: Strings.logoutPromptMessage,
+                      actionLabel: Strings.logout,
+                      action: () {
+                        ref.watch(logOutNotifierProvider.notifier).logout();
+                        Navigator.pop(context, false);
+                      },
                     ),
                   );
                 },

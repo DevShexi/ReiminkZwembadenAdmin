@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/colors.dart';
 import 'package:reimink_zwembaden_admin/common/resources/strings.dart';
-import 'package:reimink_zwembaden_admin/common/resources/styles.dart';
 import 'package:reimink_zwembaden_admin/data/models/pools_listing_screen_args.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/providers.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/error/error_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/clients/pools/add_sensor_tile.dart';
-import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_counter.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/custom_input_field.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/primary_button.dart';
 

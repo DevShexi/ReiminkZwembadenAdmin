@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reimink_zwembaden_admin/common/resources/colors.dart';
-import 'package:reimink_zwembaden_admin/common/resources/strings.dart';
+import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 import 'package:reimink_zwembaden_admin/data/models/sensor.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/settings_provider.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/error/error_screen.dart';
@@ -15,10 +15,12 @@ class SensorsListingScreen extends ConsumerWidget {
     final sensors = ref.watch(sensorsSnapshotProvider);
     return sensors.when(
       data: (data) => SensorsList(
-          sensors: data.docs.map((e) {
-        final json = e.data() as Map<String, dynamic>;
-        return Sensor.fromJson(json);
-      }).toList()),
+        sensorsSnapshot: data,
+        // sensors: data.docs.map((e) {
+        //   final json = e.data() as Map<String, dynamic>;
+        //   return Sensor.fromJson(json);
+        // }).toList(),
+      ),
       error: (error, stack) => ErrorScreen(
         error: error.toString(),
         onRefresh: () {
@@ -31,8 +33,13 @@ class SensorsListingScreen extends ConsumerWidget {
 }
 
 class SensorsList extends StatelessWidget {
-  const SensorsList({Key? key, required this.sensors}) : super(key: key);
-  final List<Sensor> sensors;
+  const SensorsList({Key? key, required this.sensorsSnapshot})
+      : super(key: key);
+  final QuerySnapshot sensorsSnapshot;
+
+  void onAdd(BuildContext context) {
+    Navigator.pushNamed(context, PagePath.addSensor);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +50,29 @@ class SensorsList extends StatelessWidget {
           Strings.sensors,
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              onAdd(context);
+            },
+            icon: const Icon(
+              Icons.add,
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: sensors.isNotEmpty
+        child: sensorsSnapshot.docs.isNotEmpty
             ? ListView.builder(
                 shrinkWrap: true,
-                itemCount: sensors.length,
+                itemCount: sensorsSnapshot.docs.length,
                 itemBuilder: (BuildContext context, int index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: SensorListingTile(
-                    sensor: sensors[index],
+                    id: sensorsSnapshot.docs[index].id,
+                    sensor: Sensor.fromJson(sensorsSnapshot.docs[index].data()
+                        as Map<String, dynamic>),
                   ),
                 ),
               )

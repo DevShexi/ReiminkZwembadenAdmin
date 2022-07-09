@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:reimink_zwembaden_admin/common/utils/storage_utils.dart';
 import 'package:reimink_zwembaden_admin/data/dataSources/client_network_data_source.dart';
 import 'package:reimink_zwembaden_admin/data/dataSources/data_sources.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/admin_repository.dart';
@@ -23,6 +24,7 @@ class Injector {
     _setUpSettingsRepository();
     _setUpFirebaseAuth();
     _setUpFirebaseStorage();
+    _setUpStorageUtils();
     _setUpFirebaseFirestore();
   }
 
@@ -83,6 +85,14 @@ class Injector {
   static void _setUpFirebaseStorage() {
     _dependency.registerFactory<FirebaseStorage>(
       () => FirebaseStorage.instance,
+    );
+  }
+
+  static void _setUpStorageUtils() {
+    _dependency.registerFactory<StorageUtils>(
+      () => StorageUtils(
+        storageInstance: _dependency(),
+      ),
     );
   }
 

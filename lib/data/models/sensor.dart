@@ -8,6 +8,7 @@ class Sensor {
   const Sensor({
     required this.sensorName,
     required this.mqttTopic,
+    required this.enableSet,
     this.setTopic,
     this.minSet,
     this.maxSet,
@@ -16,6 +17,7 @@ class Sensor {
   });
   final String sensorName;
   final String mqttTopic;
+  final bool enableSet;
   final String? setTopic;
   final double? minSet;
   final double? maxSet;

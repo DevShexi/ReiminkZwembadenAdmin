@@ -10,7 +10,6 @@ class ImagePickerUtility {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      print(image.path);
       path = image.path;
     }
     return path;

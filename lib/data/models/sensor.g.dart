@@ -9,6 +9,7 @@ part of 'sensor.dart';
 Sensor _$SensorFromJson(Map<String, dynamic> json) => Sensor(
       sensorName: json['sensor_name'] as String,
       mqttTopic: json['mqtt_topic'] as String,
+      enableSet: json['enable_set'] as bool,
       setTopic: json['set_topic'] as String?,
       minSet: (json['min_set'] as num?)?.toDouble(),
       maxSet: (json['max_set'] as num?)?.toDouble(),
@@ -19,6 +20,7 @@ Sensor _$SensorFromJson(Map<String, dynamic> json) => Sensor(
 Map<String, dynamic> _$SensorToJson(Sensor instance) => <String, dynamic>{
       'sensor_name': instance.sensorName,
       'mqtt_topic': instance.mqttTopic,
+      'enable_set': instance.enableSet,
       'set_topic': instance.setTopic,
       'min_set': instance.minSet,
       'max_set': instance.maxSet,

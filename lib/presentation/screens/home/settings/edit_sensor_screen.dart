@@ -7,6 +7,7 @@ import 'package:reimink_zwembaden_admin/common/resources/colors.dart';
 import 'package:reimink_zwembaden_admin/common/resources/strings.dart';
 import 'package:reimink_zwembaden_admin/common/utils/image_picker_utils.dart';
 import 'package:reimink_zwembaden_admin/common/utils/validators.dart';
+import 'package:reimink_zwembaden_admin/data/models/sensor.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/settings_repository.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/providers.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_counter.dart';
@@ -14,14 +15,17 @@ import 'package:reimink_zwembaden_admin/presentation/widgets/common/loader.dart'
 import 'package:reimink_zwembaden_admin/presentation/widgets/custom_input_field.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/primary_button.dart';
 
-class AddSensorScreen extends ConsumerStatefulWidget {
-  const AddSensorScreen({Key? key}) : super(key: key);
+class EditSensorScreen extends ConsumerStatefulWidget {
+  const EditSensorScreen({Key? key, required this.id, required this.sensor})
+      : super(key: key);
+  final Sensor sensor;
+  final String id;
 
   @override
-  _AddSensorScreenState createState() => _AddSensorScreenState();
+  _EditSensorScreenState createState() => _EditSensorScreenState();
 }
 
-class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
+class _EditSensorScreenState extends ConsumerState<EditSensorScreen> {
   final TextEditingController _sensorCounterController =
       TextEditingController(text: "1");
   final TextEditingController _sensorNameController = TextEditingController();
@@ -32,7 +36,26 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
   final _formKey = GlobalKey<FormState>();
   final SettingsRepository settingsRepository = GetIt.I<SettingsRepository>();
   String? iconPath;
+  String? iconUrl;
+  bool iconUpdated = false;
   bool enableSet = false;
+
+  @override
+  void initState() {
+    enableSet = widget.sensor.enableSet;
+    _sensorCounterController.text = widget.sensor.maxSensorCount.toString();
+    _sensorNameController.text = widget.sensor.sensorName;
+    _setTopicController.text = widget.sensor.setTopic ?? "";
+    widget.sensor.minSet != null
+        ? _minSetController.text = widget.sensor.minSet.toString()
+        : "";
+    widget.sensor.maxSet != null
+        ? _maxSetController.text = widget.sensor.maxSet.toString()
+        : "";
+    _mqttTopicController.text = widget.sensor.mqttTopic;
+    iconUrl = widget.sensor.iconUrl;
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -67,7 +90,11 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
 
   void pickSensorIconFromGallery() async {
     iconPath = await ImagePickerUtility().picImageFromGallery();
-    setState(() {});
+    setState(() {
+      if (iconPath != null) {
+        iconUpdated = true;
+      }
+    });
   }
 
   bool validSetValues() {
@@ -105,7 +132,7 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
         ref.refresh(sensorsSnapshotProvider);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(Strings.sensorAddedSuccessMessage),
+            content: Text(Strings.sensorUpdatedSuccessMessage),
             backgroundColor: Colors.green,
             duration: Duration(
               milliseconds: 800,
@@ -212,7 +239,8 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                                                   BorderRadius.circular(
                                                 7.0,
                                               ),
-                                              child: iconPath != null
+                                              child: iconUrl == null &&
+                                                      iconPath != null
                                                   ? ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -222,12 +250,38 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                                                         File(iconPath!),
                                                       ),
                                                     )
-                                                  : const Center(
-                                                      child: Icon(
-                                                        Icons.add_a_photo,
-                                                        color: AppColors.blue,
-                                                      ),
-                                                    ),
+                                                  : iconUrl != null &&
+                                                          iconPath == null
+                                                      ? ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                            7.0,
+                                                          ),
+                                                          child: Image.network(
+                                                            iconUrl!,
+                                                          ),
+                                                        )
+                                                      : iconUrl != null &&
+                                                              iconPath != null
+                                                          ? ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                7.0,
+                                                              ),
+                                                              child: Image.file(
+                                                                File(iconPath!),
+                                                              ),
+                                                            )
+                                                          : const Center(
+                                                              child: Icon(
+                                                                Icons
+                                                                    .add_a_photo,
+                                                                color: AppColors
+                                                                    .blue,
+                                                              ),
+                                                            ),
                                             ),
                                           ),
                                         ),
@@ -286,6 +340,25 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                                     value: enableSet,
                                     onChanged: (value) {
                                       setState(() {
+                                        if (value == false) {
+                                          _setTopicController.clear();
+                                          _minSetController.clear();
+                                          _maxSetController.clear();
+                                        }
+                                        if (value == true) {
+                                          _setTopicController.text =
+                                              widget.sensor.setTopic ?? "";
+                                          widget.sensor.minSet != null
+                                              ? _minSetController.text = widget
+                                                  .sensor.minSet
+                                                  .toString()
+                                              : "";
+                                          widget.sensor.maxSet != null
+                                              ? _maxSetController.text = widget
+                                                  .sensor.maxSet
+                                                  .toString()
+                                              : "";
+                                        }
                                         enableSet = value ?? false;
                                       });
                                     }),
@@ -364,7 +437,9 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                           if (validSetValues()) {
                             ref
                                 .watch(sensorNotifierProvider.notifier)
-                                .addSensor(
+                                .editSensor(
+                                  id: widget.id,
+                                  iconUpdated: iconUpdated,
                                   sensorName: _sensorNameController.text,
                                   mqttTopic: _mqttTopicController.text,
                                   enableSet: enableSet,
@@ -380,6 +455,7 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                                   maxSensorCount:
                                       int.parse(_sensorCounterController.text),
                                   iconPath: iconPath,
+                                  iconUrl: iconUrl,
                                 );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(

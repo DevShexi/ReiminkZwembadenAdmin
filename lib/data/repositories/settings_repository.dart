@@ -1,12 +1,11 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:reimink_zwembaden_admin/data/dataSources/data_sources.dart';
 import 'package:reimink_zwembaden_admin/data/models/sensor.dart';
 
 abstract class SettingsRepository {
   Future<void> addNewSensor(Sensor newSensor);
-  Future<String?> uploadSensorIconToStorage(File image);
+  Future<void> updateSensor(String id, Sensor updatedSensor);
+  Future<void> deleteSensor(String id);
   Stream<QuerySnapshot> getSensorsSnapshot();
 }
 
@@ -17,15 +16,21 @@ class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsNetworkDataSource settingsNetworkDataSource;
   @override
   Future<void> addNewSensor(Sensor newSensor) async {
-    final response = settingsNetworkDataSource.addNewSensor(newSensor);
+    final response = await settingsNetworkDataSource.addNewSensor(newSensor);
     return response;
   }
 
   @override
-  Future<String?> uploadSensorIconToStorage(File image) async {
-    final downloadUrl =
-        await settingsNetworkDataSource.uploadSensorIconToStorage(image);
-    return downloadUrl;
+  Future<void> updateSensor(String id, Sensor updatedSensor) async {
+    final response =
+        await settingsNetworkDataSource.updateSensor(id, updatedSensor);
+    return response;
+  }
+
+  @override
+  Future<void> deleteSensor(String id) async {
+    final response = await settingsNetworkDataSource.deleteSensor(id);
+    return response;
   }
 
   @override
