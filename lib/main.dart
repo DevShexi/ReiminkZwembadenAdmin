@@ -8,6 +8,8 @@ import 'package:reimink_zwembaden_admin/firebase_options.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/auth/login_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/auth/register_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/home/clients/clients_screen.dart';
+import 'package:reimink_zwembaden_admin/presentation/screens/home/clients/pools/add_database_config_screen.dart';
+import 'package:reimink_zwembaden_admin/presentation/screens/home/clients/pools/add_pool_sensors_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/home/settings/add_sensor_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/home/settings/sensors_listing_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/landing/landing_screen.dart';
@@ -43,9 +45,12 @@ class MyApp extends StatelessWidget {
         PagePath.landingPage: (context) => const LandingPage(),
         PagePath.poolsListing: (context) => const PoolsListingScreen(),
         PagePath.addPool: (context) => const AddPoolScreen(),
+        PagePath.addPoolSensors: (context) => const AddPoolSensorsScreen(),
         PagePath.addSensor: (context) => const AddSensorScreen(),
         PagePath.clients: (context) => const ClientsScreen(),
         PagePath.sensors: (context) => const SensorsListingScreen(),
+        PagePath.addDatabaseConfig: (context) =>
+            const AddDatabaseConfigScreen(),
       },
       theme: AppTheme.light(),
       // home: const HomeScreen(),

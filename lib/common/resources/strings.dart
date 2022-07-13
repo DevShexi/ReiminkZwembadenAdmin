@@ -9,7 +9,7 @@ class Strings {
   static const tagline = "zwembaden | wellness | waterfun";
   static const login = "Inloggen";
   static const email = "Email";
-  static const password = "Password";
+  static const password = "Wachtwoord";
   static const resetPassword = "Wachtwoord opnieuw instellen";
   static const close = "Close";
   static const passwordResetLinkSentMessage =
@@ -30,7 +30,7 @@ class Strings {
 
   // Register Screen
   static const register = "Registreren";
-  static const userName = "gebruikersnaam";
+  static const userName = "Gebruikersnaam";
   static const userNameRequired = "username is required";
   static const passwordLengthValidationMessage =
       "Het wachtwoord moet op zijn minst 6 tekens lang zijn";
@@ -56,11 +56,27 @@ class Strings {
   static const decline = "Afwijzen";
   static const noClients = "Geen data gevonden";
 
+  //Pools Listing Screen
+  static const clientDatabaseConfig = "Configuratie clientdatabase";
+  static const noConfigurationsFound = "Geen databaseconfiguraties gevonden";
+  static const configure = "Configureren";
+  static const hostName = "Hostnaam";
+  static const port = "port";
+  static const databaseName = "Database naam";
+  static const tapPlusToAddPoolMessage =
+      "Tik op de knop '+' om een ​​pool voor deze klant toe te voegen";
+
+  //Add Database Config screen
+  static const configureDatabase = "Database configureren";
+  static const addConnfiguratios = "Configuraties toevoegen";
+  static const databaseConfigured = "Database geconfigureerd";
+
   //Settings Screen
   static const adminSettings = "Beheerdersinstellingen";
   static const addClient = "Klant toevoegen";
   static const sensors = "Sensoren";
   static const addSensor = "Sensor toevoegen";
+  static const addPoolSensor = "Zwembadsensoren toevoegen";
   static const add = "toevoegen";
 
   //Add Pool Screen
@@ -71,6 +87,8 @@ class Strings {
   static const maxSelected = "Maximaal geselecteerd";
   static const poolName = "Naam zwembad";
   static const poolTopic = "Zwembad onderwerp";
+  static const poolAddedSuccessMessage =
+      "Het zwembad is succesvol toegevoegd aan de Firebase";
 
   //Add Sensor Screen
   static const sensorName = "Sensornaam";

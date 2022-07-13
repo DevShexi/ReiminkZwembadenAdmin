@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:reimink_zwembaden_admin/data/models/network/network_models.dart';
+import 'package:reimink_zwembaden_admin/data/models/models.dart';
 import 'package:reimink_zwembaden_admin/network/api_client.dart';
 
 abstract class AdminNetworkDataSource {

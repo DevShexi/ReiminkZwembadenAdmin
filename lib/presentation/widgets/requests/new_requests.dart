@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
-import 'package:reimink_zwembaden_admin/data/models/network/clients.dart';
+import 'package:reimink_zwembaden_admin/data/models/models.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/providers.dart';
 import 'package:reimink_zwembaden_admin/presentation/screens/error/error_screen.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/loader.dart';

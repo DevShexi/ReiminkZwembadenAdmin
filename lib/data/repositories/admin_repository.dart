@@ -1,5 +1,5 @@
 import 'package:reimink_zwembaden_admin/data/dataSources/admin_network_data_source.dart';
-import 'package:reimink_zwembaden_admin/data/models/network/network_models.dart';
+import 'package:reimink_zwembaden_admin/data/models/models.dart';
 
 abstract class AdminRepository {
   Future<LoginResponse> login(AuthRequest loginRequest);

@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
+import 'package:reimink_zwembaden_admin/data/models/client_pool.dart';
+import 'package:reimink_zwembaden_admin/data/models/database_config.dart';
+import 'package:reimink_zwembaden_admin/data/models/pool_sensor.dart';
 import 'package:reimink_zwembaden_admin/data/models/pools_listing_screen_args.dart';
+import 'package:reimink_zwembaden_admin/presentation/providers/client_database_config_provider.dart';
+import 'package:reimink_zwembaden_admin/presentation/providers/client_pool_provider.dart';
+import 'package:reimink_zwembaden_admin/presentation/widgets/clients/pools/client_pool_extension_tile.dart';
+import 'package:reimink_zwembaden_admin/presentation/widgets/clients/pools/clients_database_configurations.dart';
+import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_elevated_button.dart';
+import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_loading_indicator.dart';
 
-class PoolsListingScreen extends StatefulWidget {
+class PoolsListingScreen extends ConsumerWidget {
   const PoolsListingScreen({Key? key}) : super(key: key);
-
   @override
-  State<PoolsListingScreen> createState() => _PoolsListingScreenState();
-}
-
-class _PoolsListingScreenState extends State<PoolsListingScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final args =
         ModalRoute.of(context)!.settings.arguments as PoolsListingScreenArgs;
+    final clientPoolsSnapshot = ref.watch(clientPoolsProvider(args.clientUid));
+    final config = ref.watch(clientDatabaseConfigProvider(args.clientUid));
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
@@ -60,285 +66,96 @@ class _PoolsListingScreenState extends State<PoolsListingScreen> {
         ),
         child: SingleChildScrollView(
           child: Column(
-            children: const [
-              SizedBox(
-                height: 10.0,
-              ),
-              PoolSensorsExpansionTile(
-                poolName: "Wedstrijdbad",
-              ),
-              PoolSensorsExpansionTile(
-                poolName: "Deolgroepenbad",
-              ),
-              PoolSensorsExpansionTile(
-                poolName: "Peuterbad",
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SensorSwitchTile extends StatefulWidget {
-  const SensorSwitchTile({
-    Key? key,
-    required this.sensorName,
-    required this.isOn,
-    this.leadingIcon,
-  }) : super(key: key);
-  final String sensorName;
-  final Widget? leadingIcon;
-  final bool isOn;
-
-  @override
-  State<SensorSwitchTile> createState() => _SensorSwitchTileState();
-}
-
-class _SensorSwitchTileState extends State<SensorSwitchTile> {
-  bool? _isOn;
-  @override
-  void initState() {
-    _isOn = widget.isOn;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 6.0,
-        // vertical: 8.0,
-      ),
-      margin: const EdgeInsets.symmetric(
-        vertical: 5.0,
-        horizontal: 10.0,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(7.0),
-        border: Border.all(
-          color: AppColors.grey,
-          width: 1.0,
-        ),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.info_rounded,
-            color: AppColors.primary,
-            size: 34.0,
-          ),
-          const SizedBox(width: 10.0),
-          Text(
-            widget.sensorName,
-            style: Theme.of(context).textTheme.bodyText2,
-          ),
-          const Spacer(),
-          Switch(
-            onChanged: (value) {
-              setState(() {
-                _isOn != !_isOn!;
-              });
-            },
-            value: _isOn!,
-            activeColor: AppColors.blue,
-            activeTrackColor: AppColors.lightBlue,
-            inactiveThumbColor: AppColors.error,
-            inactiveTrackColor: AppColors.errorLight,
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class PoolActionIconButton extends StatelessWidget {
-  const PoolActionIconButton(
-      {Key? key,
-      required this.label,
-      required this.icon,
-      required this.action,
-      this.color})
-      : super(key: key);
-  final IconData icon;
-  final String label;
-  final Color? color;
-  final Function() action;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(7.0),
-          elevation: 3.0,
-          child: InkWell(
-            onTap: action,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(7.0),
-                border: Border.all(
-                  color: color ?? AppColors.blue,
-                  width: 1.0,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 25.0,
-                    height: 25.0,
-                    decoration: BoxDecoration(
-                      color: color ?? AppColors.primary,
-                      borderRadius: BorderRadius.circular(
-                        4.0,
-                      ),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        icon,
-                        color: AppColors.white,
-                        size: 16.0,
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    child: SizedBox(
-                      child: Center(
-                        child: Text(
-                          label,
-                          style:
-                              Theme.of(context).textTheme.subtitle2?.copyWith(
-                                    fontSize: 12.0,
-                                  ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomDivider extends StatelessWidget {
-  const CustomDivider({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(
-        bottom: 10.0,
-      ),
-      height: 1,
-      decoration: BoxDecoration(
-          color: AppColors.textGrey.withOpacity(0.2),
-          boxShadow: const [
-            BoxShadow(
-              offset: Offset(0.0, 2.0),
-              blurRadius: 5.0,
-              // spreadRadius: 2.0,
-              // color: Colors.green,
-            ),
-          ]),
-    );
-  }
-}
-
-class PoolSensorsExpansionTile extends StatefulWidget {
-  const PoolSensorsExpansionTile({
-    Key? key,
-    required this.poolName,
-  }) : super(key: key);
-  final String poolName;
-
-  @override
-  State<PoolSensorsExpansionTile> createState() =>
-      _PoolSensorsExpansionTileState();
-}
-
-class _PoolSensorsExpansionTileState extends State<PoolSensorsExpansionTile> {
-  bool _customTileExpanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(
-          7.0,
-        ),
-        child: Theme(
-          data: ThemeData().copyWith(dividerColor: Colors.transparent),
-          child: ExpansionTile(
-            backgroundColor: AppColors.white,
-            collapsedBackgroundColor: AppColors.white,
-            textColor: AppColors.primary,
-            collapsedTextColor: AppColors.black,
-            title: Text(
-              widget.poolName,
-            ),
-            // subtitle: const Text('Custom expansion arrow icon'),
-            trailing: Icon(
-              _customTileExpanded
-                  ? Icons.keyboard_arrow_up
-                  : Icons.keyboard_arrow_down,
-            ),
-            children: <Widget>[
-              const CustomDivider(),
-              const SizedBox(height: 10.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    PoolActionIconButton(
-                      label: Strings.duplicate,
-                      icon: Icons.copy,
-                      action: () {},
-                    ),
-                    PoolActionIconButton(
-                      label: Strings.edit,
-                      icon: Icons.edit,
-                      action: () {},
-                    ),
-                    PoolActionIconButton(
-                      label: Strings.delete,
-                      icon: Icons.delete,
-                      color: AppColors.error,
-                      action: () {},
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10.0),
-              const SensorSwitchTile(
-                sensorName: "Free Chlorine",
-                isOn: true,
-              ),
-              const SensorSwitchTile(
-                sensorName: "Bound Chlorine",
-                isOn: true,
-              ),
-              const SensorSwitchTile(
-                sensorName: "pH",
-                isOn: false,
-              ),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               const SizedBox(
                 height: 10.0,
               ),
+              config.when(
+                data: (data) {
+                  if (data == null) {
+                    return Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 40),
+                          child: Text(Strings.noConfigurationsFound),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          child: CustomElevatedButton(
+                            label: Strings.configure,
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                PagePath.addDatabaseConfig,
+                                arguments: args.clientUid,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return ClientDatabaseConfigurations(
+                    config: data,
+                  );
+                },
+                error: (err, stack) {
+                  return const SizedBox.shrink();
+                },
+                loading: () {
+                  return const ClientDatabaseConfigurationsLoader();
+                },
+              ),
+              const SizedBox(height: 4.0),
+              const Divider(thickness: 1.0, color: AppColors.textGrey),
+              const SizedBox(height: 4.0),
+              clientPoolsSnapshot.when(
+                data: (data) {
+                  List<ClientPool> clientPools = [];
+                  for (var pool in data.docs) {
+                    clientPools.add(ClientPool.fromJson(pool.data()));
+                  }
+                  return ClientPoolsBuilder(clientPools: clientPools);
+                },
+                error: (error, stack) => const SizedBox.shrink(),
+                loading: () => const SizedBox.shrink(),
+              ),
             ],
-            onExpansionChanged: (bool expanded) {
-              setState(() => _customTileExpanded = expanded);
-            },
           ),
         ),
       ),
     );
+  }
+}
+
+class ClientPoolsBuilder extends StatelessWidget {
+  const ClientPoolsBuilder({Key? key, required this.clientPools})
+      : super(key: key);
+  final List<ClientPool> clientPools;
+
+  @override
+  Widget build(BuildContext context) {
+    return clientPools.isNotEmpty
+        ? SingleChildScrollView(
+            child: ListView.builder(
+              physics: const ClampingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: clientPools.length,
+              itemBuilder: ((context, index) {
+                return PoolExpansionTile(
+                  clientPool: clientPools[index],
+                );
+              }),
+            ),
+          )
+        : const Padding(
+            padding: EdgeInsets.all(40.0),
+            child: Text(
+              Strings.tapPlusToAddPoolMessage,
+              textAlign: TextAlign.center,
+            ),
+          );
   }
 }

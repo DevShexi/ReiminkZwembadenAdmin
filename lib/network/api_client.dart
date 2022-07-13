@@ -4,8 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reimink_zwembaden_admin/common/resources/strings.dart';
-import 'package:reimink_zwembaden_admin/data/models/sensor.dart';
-import 'package:reimink_zwembaden_admin/data/models/network/network_models.dart';
+import 'package:reimink_zwembaden_admin/common/resources/collection_names.dart';
+import 'package:reimink_zwembaden_admin/data/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ApiClient {
@@ -14,8 +14,12 @@ abstract class ApiClient {
   Future<bool> forgotPassword(String email);
   Future? logout();
   Future<void>? addNewSensor(Sensor newSensor);
+  Future<void>? addClientPool(ClientPool clientPool);
+  Stream<QuerySnapshot<Map<String, dynamic>>> getClientPoolsSnapshot(String id);
   Future<void>? updateSensor(String id, Sensor updatedSensor);
   Future<void>? deleteSensor(String id);
+  Future<void>? addClientDatabaseConfig(String id, DatabaseConfig config);
+  Future<DatabaseConfig?>? getClientDatabaseConfig(String id);
   String? getUserEmail();
   String? getUserId();
   Stream<QuerySnapshot<Map<String, dynamic>>> getSensorsSnapshot();
@@ -124,9 +128,8 @@ class ApiClientImpl implements ApiClient {
 
   @override
   Future<void> addNewSensor(Sensor newSensor) async {
-    final databaseInstance = FirebaseFirestore.instance;
-    final response = await databaseInstance
-        .collection("sensors")
+    final response = await firebaseFirestore!
+        .collection(CollectionNames.sensors)
         .doc(
           DateTime.now().toString(),
         )
@@ -139,10 +142,69 @@ class ApiClientImpl implements ApiClient {
   }
 
   @override
+  Future<void> addClientPool(ClientPool clientPool) async {
+    final response = await firebaseFirestore!
+        .collection(CollectionNames.clientPools)
+        .doc(clientPool.clientId)
+        .collection(CollectionNames.pools)
+        .doc(clientPool.poolName)
+        .set(
+          clientPool.toJson(),
+        )
+        .then((value) => debugPrint("Sensor Added"))
+        .catchError((error) => debugPrint("Failed to add sensor: $error"));
+    return response;
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getClientPoolsSnapshot(
+      String id) {
+    return firebaseFirestore!
+        .collection(CollectionNames.clientPools)
+        .doc(id)
+        .collection(CollectionNames.pools)
+        .snapshots();
+  }
+
+  @override
+  Future<void>? addClientDatabaseConfig(
+      String id, DatabaseConfig config) async {
+    final response = await firebaseFirestore!
+        .collection(CollectionNames.clientDatabaseConfig)
+        .doc(id)
+        .set(
+          config.toJson(),
+        )
+        .then(
+          (value) => debugPrint("Database Configuration Added for Client $id"),
+        )
+        .catchError((error) =>
+            debugPrint("Failed to add Database Configuration: $error"));
+    return response;
+  }
+
+  @override
+  Future<DatabaseConfig?>? getClientDatabaseConfig(String id) async {
+    DatabaseConfig? config;
+    final response = await firebaseFirestore!
+        .collection(CollectionNames.clientDatabaseConfig)
+        .doc(id)
+        .get();
+    if (response.exists) {
+      try {
+        config =
+            DatabaseConfig.fromJson(response.data() as Map<String, dynamic>);
+      } catch (e) {
+        debugPrint("Failed to get Database Configuration: $e");
+      }
+    }
+    return config;
+  }
+
+  @override
   Future<void> updateSensor(String id, Sensor updatedSensor) async {
-    final databaseInstance = FirebaseFirestore.instance;
-    final response = await databaseInstance
-        .collection("sensors")
+    final response = await firebaseFirestore!
+        .collection(CollectionNames.sensors)
         .doc(id)
         .update(
           updatedSensor.toJson(),
@@ -154,9 +216,8 @@ class ApiClientImpl implements ApiClient {
 
   @override
   Future<void> deleteSensor(String id) async {
-    final databaseInstance = FirebaseFirestore.instance;
-    final response = await databaseInstance
-        .collection("sensors")
+    final response = await firebaseFirestore!
+        .collection(CollectionNames.sensors)
         .doc(id)
         .delete()
         .then((value) => debugPrint("Sensor Deleted Successfully"))
@@ -178,24 +239,30 @@ class ApiClientImpl implements ApiClient {
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getSensorsSnapshot() {
-    return firebaseFirestore!.collection("sensors").snapshots();
+    return firebaseFirestore!.collection(CollectionNames.sensors).snapshots();
   }
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getClientsSnapshot() {
-    return firebaseFirestore!.collection("clients").snapshots();
+    return firebaseFirestore!.collection(CollectionNames.clients).snapshots();
   }
 
   @override
   Future approveClient({required String clientId}) async {
-    await firebaseFirestore!.collection("clients").doc(clientId).update(
+    await firebaseFirestore!
+        .collection(CollectionNames.clients)
+        .doc(clientId)
+        .update(
       {"status": Strings.approvedStatus},
     );
   }
 
   @override
   Future rejectClient({required String clientId}) async {
-    await firebaseFirestore!.collection("clients").doc(clientId).update(
+    await firebaseFirestore!
+        .collection(CollectionNames.clients)
+        .doc(clientId)
+        .update(
       {"status": Strings.rejectedStatus},
     );
   }

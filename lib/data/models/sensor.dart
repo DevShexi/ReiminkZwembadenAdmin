@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:reimink_zwembaden_admin/data/models/pool_sensor.dart';
 part 'sensor.g.dart';
 
 @JsonSerializable(
@@ -26,4 +27,17 @@ class Sensor {
 
   factory Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
   Map<String, dynamic> toJson() => _$SensorToJson(this);
+
+  PoolSensor toPoolSensor() => PoolSensor(
+        sensorName: sensorName,
+        mqttTopic: mqttTopic,
+        enableSet: enableSet,
+        setTopic: setTopic,
+        minSet: minSet,
+        maxSet: maxSet,
+        iconUrl: iconUrl,
+        count: 0,
+        maxSensorCount: maxSensorCount,
+        isSelected: false,
+      );
 }

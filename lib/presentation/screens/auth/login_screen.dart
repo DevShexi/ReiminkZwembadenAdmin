@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 import 'package:reimink_zwembaden_admin/common/utils/validators.dart';
-import 'package:reimink_zwembaden_admin/data/models/network/network_models.dart';
+import 'package:reimink_zwembaden_admin/data/models/models.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/admin_repository.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/custom_input_field.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/primary_button.dart';

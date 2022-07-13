@@ -22,8 +22,6 @@ class AddSensorScreen extends ConsumerStatefulWidget {
 }
 
 class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
-  final TextEditingController _sensorCounterController =
-      TextEditingController(text: "1");
   final TextEditingController _sensorNameController = TextEditingController();
   final TextEditingController _setTopicController = TextEditingController();
   final TextEditingController _minSetController = TextEditingController();
@@ -33,10 +31,10 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
   final SettingsRepository settingsRepository = GetIt.I<SettingsRepository>();
   String? iconPath;
   bool enableSet = false;
+  int sensorCounter = 1;
 
   @override
   void dispose() {
-    _sensorCounterController.dispose();
     _sensorNameController.dispose();
     _mqttTopicController.dispose();
     _setTopicController.dispose();
@@ -47,21 +45,15 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
 
   void decreaseCount() {
     FocusManager.instance.primaryFocus?.unfocus();
-    int value = _sensorCounterController.text.isNotEmpty
-        ? int.parse(_sensorCounterController.text)
-        : 1;
     setState(() {
-      value > 1 ? _sensorCounterController.text = (--value).toString() : 1;
+      sensorCounter > 1 ? sensorCounter-- : 1;
     });
   }
 
   void increaseCount() {
     FocusManager.instance.primaryFocus?.unfocus();
-    int value = _sensorCounterController.text.isNotEmpty
-        ? int.parse(_sensorCounterController.text)
-        : 1;
     setState(() {
-      value < 9 ? _sensorCounterController.text = (++value).toString() : 9;
+      sensorCounter < 9 ? sensorCounter++ : 9;
     });
   }
 
@@ -262,9 +254,7 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                                             alignment: Alignment.bottomCenter,
                                             child: CustomCounter(
                                               size: const Size(34, 34),
-                                              controller:
-                                                  _sensorCounterController,
-                                              onChanged: (value) {},
+                                              value: sensorCounter,
                                               onDecrement: decreaseCount,
                                               onIncrement: increaseCount,
                                               active: true,
@@ -377,8 +367,7 @@ class _AddSensorScreenState extends ConsumerState<AddSensorScreen> {
                                       _maxSetController.text.trim().isNotEmpty
                                           ? double.parse(_maxSetController.text)
                                           : null,
-                                  maxSensorCount:
-                                      int.parse(_sensorCounterController.text),
+                                  maxSensorCount: sensorCounter,
                                   iconPath: iconPath,
                                 );
                           } else {

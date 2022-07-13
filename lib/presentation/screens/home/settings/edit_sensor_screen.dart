@@ -316,9 +316,7 @@ class _EditSensorScreenState extends ConsumerState<EditSensorScreen> {
                                             alignment: Alignment.bottomCenter,
                                             child: CustomCounter(
                                               size: const Size(34, 34),
-                                              controller:
-                                                  _sensorCounterController,
-                                              onChanged: (value) {},
+                                              value: 0,
                                               onDecrement: decreaseCount,
                                               onIncrement: increaseCount,
                                               active: true,

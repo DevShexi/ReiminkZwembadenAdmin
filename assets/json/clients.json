@@ -1,27 +1,31 @@
 {
     "requests": [
         {
-            "id": "1",
-            "name": "Bret",
-            "email": "sincere@april.biz",
+            "client_id": "1",
+            "client_name": "Bret",
+            "client_email": "sincere@april.biz",
+            "status": "pending",
             "image_url": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8cGVvcGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
         },
         {
-            "id": "2",
-            "name": "Antonette",
-            "email": "shanna@melissa.tv",
+            "client_id": "2",
+            "client_name": "Antonette",
+            "client_email": "shanna@melissa.tv",
+            "status": "pending",
             "image_url": "https://images.unsplash.com/photo-1537511446984-935f663eb1f4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mjl8fHBlb3BsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
         },
         {
-            "id": "3",
-            "name": "Samantha",
-            "email": "nathan@yesenia.net",
+            "client_id": "3",
+            "client_name": "Samantha",
+            "client_email": "nathan@yesenia.net",
+            "status": "pending",
             "image_url": "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzl8fHBlb3BsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
         },
         {
-            "id": "4",
-            "name": "Karianne",
-            "email": "julianne.oconner@kory.org",
+            "client_id": "4",
+            "client_name": "Karianne",
+            "client_email": "julianne.oconner@kory.org",
+            "status": "pending",
             "image_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTd8fHBlb3BsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
         }
     ],

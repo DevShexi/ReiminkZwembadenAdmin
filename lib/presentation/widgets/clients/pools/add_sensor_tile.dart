@@ -1,87 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
+import 'package:reimink_zwembaden_admin/data/models/pool_sensor.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_counter.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_loading_indicator.dart';
 
-class AddSensorTile extends StatefulWidget {
+class AddSensorTile extends StatelessWidget {
   const AddSensorTile({
     Key? key,
-    required this.name,
-    required this.maxSensorCount,
-    this.iconUrl,
+    required this.sensor,
+    required this.isChecked,
+    required this.value,
+    required this.toggleChecked,
+    required this.increaseCount,
+    required this.decreaseCount,
   }) : super(key: key);
-  final String name;
-  final String? iconUrl;
-  final int maxSensorCount;
-
-  @override
-  State<AddSensorTile> createState() => _AddSensorTileState();
-}
-
-class _AddSensorTileState extends State<AddSensorTile> {
-  final TextEditingController _sensorCounterController =
-      TextEditingController();
-  bool _isChecked = false;
-
-  @override
-  void dispose() {
-    _sensorCounterController.dispose();
-    super.dispose();
-  }
-
-  void toggleChecked(bool value) {
-    setState(() {
-      value
-          ? _sensorCounterController.text = "1"
-          : _sensorCounterController.clear();
-      _isChecked = value;
-    });
-  }
-
-  void limitQuantity(String value) {
-    if (value.trim().isNotEmpty) {
-      int val = int.parse(value);
-      if (val > widget.maxSensorCount) {
-        setState(
-          () {
-            _sensorCounterController.value = TextEditingValue(
-              text: widget.maxSensorCount.toString(),
-              selection: TextSelection.fromPosition(
-                TextPosition(
-                    offset:
-                        _sensorCounterController.value.selection.baseOffset),
-              ),
-            );
-            FocusScope.of(context).unfocus();
-          },
-        );
-      } else {
-        FocusScope.of(context).unfocus();
-      }
-    }
-  }
-
-  void decreaseCount(sensorCounterController) {
-    FocusManager.instance.primaryFocus?.unfocus();
-    int value = sensorCounterController.text.isNotEmpty
-        ? int.parse(sensorCounterController.text)
-        : 1;
-    setState(() {
-      value > 1 ? sensorCounterController.text = (--value).toString() : 1;
-    });
-  }
-
-  void increaseCount(sensorCounterController) {
-    FocusManager.instance.primaryFocus?.unfocus();
-    int value = sensorCounterController.text.isNotEmpty
-        ? int.parse(sensorCounterController.text)
-        : 1;
-    setState(() {
-      value < widget.maxSensorCount
-          ? sensorCounterController.text = (++value).toString()
-          : widget.maxSensorCount;
-    });
-  }
+  final PoolSensor sensor;
+  final bool isChecked;
+  final int value;
+  final Function() toggleChecked;
+  final Function() increaseCount;
+  final Function() decreaseCount;
 
   @override
   Widget build(BuildContext context) {
@@ -107,17 +45,17 @@ class _AddSensorTileState extends State<AddSensorTile> {
           Row(
             children: [
               Checkbox(
-                value: _isChecked,
+                value: sensor.isSelected,
                 onChanged: (value) {
-                  toggleChecked(value!);
+                  toggleChecked();
                 },
               ),
               SizedBox(
                 height: 24,
                 width: 24,
                 child: Center(
-                  child: widget.iconUrl != null
-                      ? Image.network(widget.iconUrl!)
+                  child: sensor.iconUrl != null
+                      ? Image.network(sensor.iconUrl!)
                       : const Icon(
                           Icons.info,
                           color: AppColors.primary,
@@ -129,31 +67,24 @@ class _AddSensorTileState extends State<AddSensorTile> {
               ),
               Expanded(
                 child: SizedBox(
-                  child: Text(widget.name),
+                  child: Text(sensor.sensorName),
                 ),
               ),
               const SizedBox(
                 width: 8.0,
               ),
               AbsorbPointer(
-                absorbing: !_isChecked,
+                absorbing: !sensor.isSelected!,
                 child: CustomCounter(
-                  controller: _sensorCounterController,
-                  active: _isChecked,
-                  onChanged: limitQuantity,
-                  onDecrement: () {
-                    decreaseCount(_sensorCounterController);
-                  },
-                  onIncrement: () {
-                    increaseCount(_sensorCounterController);
-                  },
+                  active: sensor.isSelected!,
+                  value: sensor.count,
+                  onDecrement: decreaseCount,
+                  onIncrement: increaseCount,
                 ),
               )
             ],
           ),
-          _sensorCounterController.text.isNotEmpty &&
-                  int.parse(_sensorCounterController.text) ==
-                      widget.maxSensorCount
+          sensor.count == sensor.maxSensorCount
               ? Text(
                   Strings.maxSelected,
                   style: AppStyles.extraSmallLabel.copyWith(

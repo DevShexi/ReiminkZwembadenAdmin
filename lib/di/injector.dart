@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:reimink_zwembaden_admin/common/utils/storage_utils.dart';
 import 'package:reimink_zwembaden_admin/data/dataSources/client_network_data_source.dart';
+import 'package:reimink_zwembaden_admin/data/dataSources/client_pools_network_data_source.dart';
 import 'package:reimink_zwembaden_admin/data/dataSources/data_sources.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/admin_repository.dart';
+import 'package:reimink_zwembaden_admin/data/repositories/client_pool_repository.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/clients_repository.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/settings_repository.dart';
 import 'package:reimink_zwembaden_admin/network/api_client.dart';
@@ -19,9 +21,11 @@ class Injector {
     _setUpAdminNetworkDataSource();
     _setUpClientsNetworkDataSource();
     _setUpSettingsNetworkDataSource();
+    _setUpClientPoolNetworkDataSource();
     _setUpAdminRepository();
     _setUpClientsRepository();
     _setUpSettingsRepository();
+    _setUpClientPoolRepository();
     _setUpFirebaseAuth();
     _setUpFirebaseStorage();
     _setUpStorageUtils();
@@ -52,6 +56,12 @@ class Injector {
     );
   }
 
+  static void _setUpClientPoolNetworkDataSource() {
+    _dependency.registerFactory<ClientPoolsNetworkDataSource>(
+      () => ClientPoolsNetworkDataSourceImpl(),
+    );
+  }
+
   static void _setUpAdminRepository() {
     _dependency.registerFactory<AdminRepository>(
       () => AdminRepositoryImpl(
@@ -72,6 +82,14 @@ class Injector {
     _dependency.registerFactory<SettingsRepository>(
       () => SettingsRepositoryImpl(
         settingsNetworkDataSource: _dependency(),
+      ),
+    );
+  }
+
+  static void _setUpClientPoolRepository() {
+    _dependency.registerFactory<ClientPoolRepository>(
+      () => ClientPoolRepositoryImpl(
+        clientPoolNetworkDataSource: _dependency(),
       ),
     );
   }

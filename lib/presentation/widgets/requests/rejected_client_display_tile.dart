@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reimink_zwembaden_admin/common/resources/colors.dart';
 import 'package:reimink_zwembaden_admin/common/resources/styles.dart';
-import 'package:reimink_zwembaden_admin/data/models/network/clients.dart';
+import 'package:reimink_zwembaden_admin/data/models/models.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_loading_indicator.dart';
 
 class RejectedClientDisplayTile extends StatelessWidget {

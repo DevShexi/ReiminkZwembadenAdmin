@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_loading_indicator.dart';
-
-import '../../../common/resources/resources.dart';
 
 class CustomCounter extends StatelessWidget {
   const CustomCounter({
     Key? key,
-    required this.controller,
     required this.onDecrement,
     required this.onIncrement,
-    required this.onChanged,
+    required this.value,
     required this.active,
     this.size,
   }) : super(key: key);
-  final TextEditingController controller;
-  final Function(String value) onChanged;
   final Function() onIncrement;
   final Function() onDecrement;
+  final int value;
   final bool active;
   final Size? size;
 
@@ -33,44 +29,25 @@ class CustomCounter extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: SizedBox(
-            width: size != null ? size!.width * 1.24 : 35,
-            height: size != null ? size!.height : 24,
-            child: TextFormField(
-              onChanged: onChanged,
-              controller: controller,
-              enableInteractiveSelection: false,
-              cursorColor: AppColors.textGrey.withOpacity(0.5),
-              // cursorHeight: 10,
-              cursorWidth: 0.5,
-              decoration: InputDecoration(
-                filled: !active,
-                contentPadding: EdgeInsets.zero,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4.0),
-                  borderSide: BorderSide(
-                    color: !active ? AppColors.grey : AppColors.blue,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4.0),
-                  borderSide: BorderSide(
-                    color: !active ? AppColors.grey : AppColors.blue,
-                  ),
-                ),
+          child: Material(
+            elevation: 3.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            color: !active ? AppColors.lightGrey : AppColors.lightBlue,
+            child: Container(
+              width: size != null ? size!.width * 1.24 : 35,
+              height: size != null ? size!.height : 24,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.0),
               ),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r'[1-9]'),
-                ),
-                // LengthLimitingTextInputFormatter(1),
-              ],
-              textAlign: TextAlign.center,
-              textAlignVertical: TextAlignVertical.center,
-              keyboardType: const TextInputType.numberWithOptions(),
-              onEditingComplete: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
+              child: Center(
+                child: value > 0
+                    ? Text(
+                        value.toString(),
+                      )
+                    : const Text(""),
+              ),
             ),
           ),
         ),
