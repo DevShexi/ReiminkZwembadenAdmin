@@ -1,19 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 import 'package:reimink_zwembaden_admin/data/models/models.dart';
+import 'package:reimink_zwembaden_admin/presentation/providers/client_pool_provider.dart';
+import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_alert_dialog.dart';
 
-class PoolExpansionTile extends StatefulWidget {
+class PoolExpansionTile extends ConsumerStatefulWidget {
   const PoolExpansionTile({Key? key, required this.clientPool})
       : super(key: key);
   final ClientPool clientPool;
 
   @override
-  State<PoolExpansionTile> createState() => _PoolExpansionTileState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _PoolExpansionTileState();
 }
 
-class _PoolExpansionTileState extends State<PoolExpansionTile> {
+class _PoolExpansionTileState extends ConsumerState<PoolExpansionTile> {
   bool _customTileExpanded = false;
   List<PoolSensor> sensors = [];
+
+  Widget deleteDialog(
+      {required WidgetRef ref,
+      required String clientId,
+      required String poolId}) {
+    return CustomAlertDialog(
+        label: "Delete Pool",
+        promptMessage:
+            "This pool and all its data will be deleted. Do you want to continue?",
+        actionLabel: "Yes",
+        action: () {
+          ref
+              .watch(clientPoolNotifierProvider.notifier)
+              .deletePool(clientId: clientId, poolId: poolId);
+          Navigator.pop(context);
+        });
+  }
 
   @override
   void initState() {
@@ -71,7 +92,15 @@ class _PoolExpansionTileState extends State<PoolExpansionTile> {
                       label: Strings.delete,
                       icon: Icons.delete,
                       color: AppColors.error,
-                      action: () {},
+                      action: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => deleteDialog(
+                              ref: ref,
+                              clientId: widget.clientPool.clientId,
+                              poolId: widget.clientPool.poolName),
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -15,7 +15,7 @@ class AddPoolSensorsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(addClientPoolNotifierProvider, (_, ScreenState screenState) {
+    ref.listen(clientPoolNotifierProvider, (_, ScreenState screenState) {
       if (screenState.stateType == StateType.error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -28,15 +28,15 @@ class AddPoolSensorsScreen extends ConsumerWidget {
         );
       } else if (screenState.stateType == StateType.success) {
         ref.refresh(sensorsSnapshotProvider);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(Strings.sensorAddedSuccessMessage),
-            backgroundColor: Colors.green,
-            duration: Duration(
-              milliseconds: 800,
-            ),
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(
+        //     content: Text(Strings.poolAddedSuccessMessage),
+        //     backgroundColor: Colors.green,
+        //     duration: Duration(
+        //       milliseconds: 800,
+        //     ),
+        //   ),
+        // );
         Navigator.pop(context);
         Navigator.pop(context);
       }
@@ -88,7 +88,7 @@ class AddPoolSensorsScreen extends ConsumerWidget {
         ),
         Consumer(
           builder: (context, ref, child) {
-            var screenState = ref.watch(addClientPoolNotifierProvider);
+            var screenState = ref.watch(clientPoolNotifierProvider);
             if (screenState.stateType == StateType.loading) {
               return const Loader();
             }
@@ -169,7 +169,7 @@ class _SensorListBuilderState extends ConsumerState<SensorListBuilder> {
               final poolName = ref.read(poolNameProvider.state).state!;
               final poolTopic = ref.read(poolTopicProvider.state).state!;
               final poolSensors = widget.sensors;
-              ref.watch(addClientPoolNotifierProvider.notifier).addClientPool(
+              ref.watch(clientPoolNotifierProvider.notifier).addPool(
                     clientName: clientName,
                     clientId: clientID,
                     poolName: poolName,

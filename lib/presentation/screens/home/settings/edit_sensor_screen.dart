@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -39,11 +38,11 @@ class _EditSensorScreenState extends ConsumerState<EditSensorScreen> {
   String? iconUrl;
   bool iconUpdated = false;
   bool enableSet = false;
+  late int sensorCounter;
 
   @override
   void initState() {
     enableSet = widget.sensor.enableSet;
-    _sensorCounterController.text = widget.sensor.maxSensorCount.toString();
     _sensorNameController.text = widget.sensor.sensorName;
     _setTopicController.text = widget.sensor.setTopic ?? "";
     widget.sensor.minSet != null
@@ -54,6 +53,7 @@ class _EditSensorScreenState extends ConsumerState<EditSensorScreen> {
         : "";
     _mqttTopicController.text = widget.sensor.mqttTopic;
     iconUrl = widget.sensor.iconUrl;
+    sensorCounter = widget.sensor.maxSensorCount ?? 1;
     super.initState();
   }
 
@@ -70,21 +70,15 @@ class _EditSensorScreenState extends ConsumerState<EditSensorScreen> {
 
   void decreaseCount() {
     FocusManager.instance.primaryFocus?.unfocus();
-    int value = _sensorCounterController.text.isNotEmpty
-        ? int.parse(_sensorCounterController.text)
-        : 1;
     setState(() {
-      value > 1 ? _sensorCounterController.text = (--value).toString() : 1;
+      sensorCounter > 1 ? sensorCounter-- : 1;
     });
   }
 
   void increaseCount() {
     FocusManager.instance.primaryFocus?.unfocus();
-    int value = _sensorCounterController.text.isNotEmpty
-        ? int.parse(_sensorCounterController.text)
-        : 1;
     setState(() {
-      value < 9 ? _sensorCounterController.text = (++value).toString() : 9;
+      sensorCounter < 9 ? sensorCounter++ : 9;
     });
   }
 
@@ -316,7 +310,7 @@ class _EditSensorScreenState extends ConsumerState<EditSensorScreen> {
                                             alignment: Alignment.bottomCenter,
                                             child: CustomCounter(
                                               size: const Size(34, 34),
-                                              value: 0,
+                                              value: sensorCounter,
                                               onDecrement: decreaseCount,
                                               onIncrement: increaseCount,
                                               active: true,

@@ -63,6 +63,17 @@ class Strings {
   static const hostName = "Hostnaam";
   static const port = "port";
   static const databaseName = "Database naam";
+  static const poolDeletedSuccessMessage =
+      "Het zwembad is succesvol verwijderd";
+  static const poolDeletedErrorMessage =
+      "Het zwembad kan niet worden verwijderd";
+  static const poolDuplicatedSuccessMessage =
+      "De pool is succesvol gedupliceerd";
+  static const poolDuplicatedErrorMessage =
+      "Het zwembad kan niet worden gedupliceerd";
+  static const poolEditSuccessMessage = "De pool is met succes bewerkt";
+  static const poolEditErrorMessage = "Het zwembad kan niet worden bewerkt";
+
   static const tapPlusToAddPoolMessage =
       "Tik op de knop '+' om een ​​pool voor deze klant toe te voegen";
 

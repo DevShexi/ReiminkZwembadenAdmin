@@ -15,6 +15,9 @@ abstract class ApiClient {
   Future? logout();
   Future<void>? addNewSensor(Sensor newSensor);
   Future<void>? addClientPool(ClientPool clientPool);
+  Future<void> deleteClientPool(String clientId, String poolId);
+  Future<void> editClientPool(
+      String clientId, String poolId, ClientPool updatedPool);
   Stream<QuerySnapshot<Map<String, dynamic>>> getClientPoolsSnapshot(String id);
   Future<void>? updateSensor(String id, Sensor updatedSensor);
   Future<void>? deleteSensor(String id);
@@ -51,8 +54,6 @@ class ApiClientImpl implements ApiClient {
         email: email,
         password: password,
       );
-      debugPrint(
-          "--------- At this time, User is already logged In ----------");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("uid", userCredentials.user!.uid);
       prefs.setBool("emailLogin", true);
@@ -119,7 +120,6 @@ class ApiClientImpl implements ApiClient {
 
   @override
   Future<void> logout() async {
-    debugPrint("--------------- Inside Logout ---------------");
     await firebaseAuth!.signOut();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
@@ -151,8 +151,38 @@ class ApiClientImpl implements ApiClient {
         .set(
           clientPool.toJson(),
         )
-        .then((value) => debugPrint("Sensor Added"))
-        .catchError((error) => debugPrint("Failed to add sensor: $error"));
+        .then((value) => debugPrint("Client Pool Added"))
+        .catchError((error) => debugPrint("Failed to add Client Pool: $error"));
+    return response;
+  }
+
+  @override
+  Future<void> editClientPool(
+      String clientId, String poolId, ClientPool updatedPool) async {
+    final response = await firebaseFirestore!
+        .collection(CollectionNames.clientPools)
+        .doc(clientId)
+        .collection(CollectionNames.pools)
+        .doc(poolId)
+        .update(
+          updatedPool.toJson(),
+        )
+        .then((value) => debugPrint("ClientPool Updated"))
+        .catchError(
+            (error) => debugPrint("Failed to update ClientPool: $error"));
+    return response;
+  }
+
+  @override
+  Future<void> deleteClientPool(String clientId, String poolId) async {
+    final response = await firebaseFirestore!
+        .collection(CollectionNames.clientPools)
+        .doc(clientId)
+        .collection(CollectionNames.pools)
+        .doc(poolId)
+        .delete()
+        .then((value) => debugPrint("Pool Deleted Successfully"))
+        .catchError((error) => debugPrint("Failed to delete Pool: $error"));
     return response;
   }
 
