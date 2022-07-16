@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -8,41 +7,6 @@ import 'package:reimink_zwembaden_admin/data/models/pool_sensor.dart';
 import 'package:reimink_zwembaden_admin/data/repositories/client_pool_repository.dart';
 import 'package:reimink_zwembaden_admin/network/api_client.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/providers.dart';
-
-class AddClientPoolNotifier extends StateNotifier<ScreenState> {
-  AddClientPoolNotifier({required this.clientPoolRepository})
-      : super(ScreenState.initial());
-  final ClientPoolRepository clientPoolRepository;
-
-  void addClientPool({
-    required String clientName,
-    required String clientId,
-    required String poolName,
-    required String poolTopic,
-    required List<PoolSensor> poolSensors,
-  }) async {
-    try {
-      state = ScreenState.loading();
-      await clientPoolRepository.addClientPool(ClientPool(
-        clientName: clientName,
-        clientId: clientId,
-        poolName: poolName,
-        poolTopic: poolTopic,
-        poolSensors: poolSensors,
-      ));
-      state = ScreenState.success("success");
-    } on FirebaseException catch (e) {
-      state = ScreenState.error(e.message);
-    }
-  }
-}
-
-final addClientPoolNotifierProviderr =
-    StateNotifierProvider<AddClientPoolNotifier, ScreenState>(
-  (ref) => AddClientPoolNotifier(
-    clientPoolRepository: GetIt.I<ClientPoolRepository>(),
-  ),
-);
 
 final clientPoolsProvider = StreamProvider.family
     .autoDispose<QuerySnapshot<Map<String, dynamic>>, String>(
@@ -65,12 +29,13 @@ class ClientPoolNotifier extends StateNotifier<ScreenState> {
     state = ScreenState.loading();
     try {
       clientPoolRepository.addClientPool(ClientPool(
+          poolId: "",
           clientName: clientName,
           clientId: clientId,
           poolName: poolName,
           poolTopic: poolTopic,
           poolSensors: poolSensors));
-      state = ScreenState.success(Strings.poolDuplicatedSuccessMessage);
+      state = ScreenState.success(Strings.poolAddedSuccessMessage);
     } catch (e) {
       state = ScreenState.error(
           "${Strings.poolDuplicatedErrorMessage} : ${e.toString()}");
@@ -88,9 +53,8 @@ class ClientPoolNotifier extends StateNotifier<ScreenState> {
     state = ScreenState.loading();
     try {
       clientPoolRepository.editClientPool(
-        clientId,
-        poolId,
         ClientPool(
+            poolId: poolId,
             clientName: clientName,
             clientId: clientId,
             poolName: poolName,
@@ -102,6 +66,10 @@ class ClientPoolNotifier extends StateNotifier<ScreenState> {
       state = ScreenState.error(
           "${Strings.poolEditErrorMessage} : ${e.toString()}");
     }
+  }
+
+  void throwError({required String errorMessage}) {
+    state = ScreenState.error(errorMessage);
   }
 
   void deletePool({required String clientId, required String poolId}) async {

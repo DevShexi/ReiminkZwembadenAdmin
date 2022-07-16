@@ -3,12 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reimink_zwembaden_admin/common/resources/resources.dart';
 import 'package:reimink_zwembaden_admin/data/models/models.dart';
 import 'package:reimink_zwembaden_admin/presentation/providers/client_pool_provider.dart';
+import 'package:reimink_zwembaden_admin/presentation/screens/home/clients/pools/edit_pool_screen.dart';
+import 'package:reimink_zwembaden_admin/presentation/widgets/clients/pools/duplicate_pool_input_dialog.dart';
 import 'package:reimink_zwembaden_admin/presentation/widgets/common/custom_alert_dialog.dart';
 
 class PoolExpansionTile extends ConsumerStatefulWidget {
-  const PoolExpansionTile({Key? key, required this.clientPool})
+  const PoolExpansionTile(
+      {Key? key, required this.clientPool, required this.poolId})
       : super(key: key);
   final ClientPool clientPool;
+  final String poolId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -18,6 +22,7 @@ class PoolExpansionTile extends ConsumerStatefulWidget {
 class _PoolExpansionTileState extends ConsumerState<PoolExpansionTile> {
   bool _customTileExpanded = false;
   List<PoolSensor> sensors = [];
+  final GlobalKey _key = GlobalKey();
 
   Widget deleteDialog(
       {required WidgetRef ref,
@@ -32,6 +37,9 @@ class _PoolExpansionTileState extends ConsumerState<PoolExpansionTile> {
           ref
               .watch(clientPoolNotifierProvider.notifier)
               .deletePool(clientId: clientId, poolId: poolId);
+          setState(() {
+            _customTileExpanded = false;
+          });
           Navigator.pop(context);
         });
   }
@@ -57,6 +65,8 @@ class _PoolExpansionTileState extends ConsumerState<PoolExpansionTile> {
         child: Theme(
           data: ThemeData().copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
+            initiallyExpanded: _customTileExpanded,
+            key: _key,
             backgroundColor: AppColors.white,
             collapsedBackgroundColor: AppColors.white,
             textColor: AppColors.primary,
@@ -81,12 +91,27 @@ class _PoolExpansionTileState extends ConsumerState<PoolExpansionTile> {
                     PoolActionIconButton(
                       label: Strings.duplicate,
                       icon: Icons.copy,
-                      action: () {},
+                      action: () {
+                        showDialog(
+                          context: context,
+                          builder: (builder) => DuplicatePoolInputDialog(
+                              clientPool: widget.clientPool),
+                        );
+                      },
                     ),
                     PoolActionIconButton(
                       label: Strings.edit,
                       icon: Icons.edit,
-                      action: () {},
+                      action: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditPoolScreen(
+                              clientPool: widget.clientPool,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     PoolActionIconButton(
                       label: Strings.delete,
@@ -98,7 +123,7 @@ class _PoolExpansionTileState extends ConsumerState<PoolExpansionTile> {
                           builder: (context) => deleteDialog(
                               ref: ref,
                               clientId: widget.clientPool.clientId,
-                              poolId: widget.clientPool.poolName),
+                              poolId: widget.clientPool.poolId),
                         );
                       },
                     ),
@@ -108,6 +133,7 @@ class _PoolExpansionTileState extends ConsumerState<PoolExpansionTile> {
               const SizedBox(height: 10.0),
               ListView.builder(
                 shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
                 itemCount: sensors.length,
                 itemBuilder: ((context, index) {
                   return SensorSwitchTile(sensor: sensors[index]);

@@ -5,8 +5,7 @@ import 'package:reimink_zwembaden_admin/data/models/client_pool.dart';
 abstract class ClientPoolRepository {
   Future addClientPool(ClientPool clientPool);
   Future<void> deleteClientPool(String clientId, String poolId);
-  Future<void> editClientPool(
-      String clientId, String poolId, ClientPool updatedPool);
+  Future<void> editClientPool(ClientPool updatedPool);
   Stream<QuerySnapshot<Map<String, dynamic>>> getClientPoolsSnapshot(String id);
 }
 
@@ -33,9 +32,7 @@ class ClientPoolRepositoryImpl implements ClientPoolRepository {
   }
 
   @override
-  Future<void> editClientPool(
-      String clientId, String poolId, ClientPool updatedPool) async {
-    return await clientPoolNetworkDataSource.editClientPool(
-        clientId, poolId, updatedPool);
+  Future<void> editClientPool(ClientPool updatedPool) async {
+    return await clientPoolNetworkDataSource.editClientPool(updatedPool);
   }
 }

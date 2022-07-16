@@ -30,7 +30,7 @@ class PoolsListingScreen extends ConsumerWidget {
       if (screenState.stateType == StateType.error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(screenState.data),
+            content: Text(screenState.errorMessage ?? screenState.data),
             backgroundColor: Colors.red,
             duration: const Duration(
               milliseconds: 800,
@@ -192,6 +192,7 @@ class ClientPoolsBuilder extends StatelessWidget {
               itemBuilder: ((context, index) {
                 return PoolExpansionTile(
                   clientPool: clientPools[index],
+                  poolId: clientPools[index].poolId,
                 );
               }),
             ),

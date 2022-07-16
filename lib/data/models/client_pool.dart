@@ -5,12 +5,14 @@ part 'client_pool.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class ClientPool {
   ClientPool({
+    required this.poolId,
     required this.clientName,
     required this.clientId,
     required this.poolName,
     required this.poolTopic,
     required this.poolSensors,
   });
+  String poolId;
   String clientName;
   String clientId;
   String poolName;

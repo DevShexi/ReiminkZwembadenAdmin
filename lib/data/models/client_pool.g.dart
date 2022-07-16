@@ -7,6 +7,7 @@ part of 'client_pool.dart';
 // **************************************************************************
 
 ClientPool _$ClientPoolFromJson(Map<String, dynamic> json) => ClientPool(
+      poolId: json['pool_id'] as String,
       clientName: json['client_name'] as String,
       clientId: json['client_id'] as String,
       poolName: json['pool_name'] as String,
@@ -18,6 +19,7 @@ ClientPool _$ClientPoolFromJson(Map<String, dynamic> json) => ClientPool(
 
 Map<String, dynamic> _$ClientPoolToJson(ClientPool instance) =>
     <String, dynamic>{
+      'pool_id': instance.poolId,
       'client_name': instance.clientName,
       'client_id': instance.clientId,
       'pool_name': instance.poolName,

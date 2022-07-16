@@ -71,6 +71,8 @@ class Strings {
       "De pool is succesvol gedupliceerd";
   static const poolDuplicatedErrorMessage =
       "Het zwembad kan niet worden gedupliceerd";
+  static const duplicatedPoolNameErrorMessage =
+      "Kan geen dubbele poolnamen/onderwerpen hebben";
   static const poolEditSuccessMessage = "De pool is met succes bewerkt";
   static const poolEditErrorMessage = "Het zwembad kan niet worden bewerkt";
 
@@ -93,6 +95,9 @@ class Strings {
   //Add Pool Screen
   static const labelRetry = "Vernieuwen";
   static const duplicate = "Duplicaat";
+  static const continueButton = "Doorgaan";
+  static const duplicatePool = "Duplicaat pool";
+  static const editPool = "Bewerk pool";
   static const edit = "Bewerk";
   static const delete = "Verwijderen";
   static const maxSelected = "Maximaal geselecteerd";
@@ -100,6 +105,8 @@ class Strings {
   static const poolTopic = "Zwembad onderwerp";
   static const poolAddedSuccessMessage =
       "Het zwembad is succesvol toegevoegd aan de Firebase";
+  static const errorAddingPoolMessage =
+      "Er is een fout opgetreden bij het toevoegen van het zwembad.";
 
   //Add Sensor Screen
   static const sensorName = "Sensornaam";

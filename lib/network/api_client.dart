@@ -16,8 +16,7 @@ abstract class ApiClient {
   Future<void>? addNewSensor(Sensor newSensor);
   Future<void>? addClientPool(ClientPool clientPool);
   Future<void> deleteClientPool(String clientId, String poolId);
-  Future<void> editClientPool(
-      String clientId, String poolId, ClientPool updatedPool);
+  Future<void> editClientPool(ClientPool updatedPool);
   Stream<QuerySnapshot<Map<String, dynamic>>> getClientPoolsSnapshot(String id);
   Future<void>? updateSensor(String id, Sensor updatedSensor);
   Future<void>? deleteSensor(String id);
@@ -143,13 +142,16 @@ class ApiClientImpl implements ApiClient {
 
   @override
   Future<void> addClientPool(ClientPool clientPool) async {
+    final String now = DateTime.now().toString();
+    final ClientPool pool = clientPool;
+    pool.poolId = now;
     final response = await firebaseFirestore!
         .collection(CollectionNames.clientPools)
         .doc(clientPool.clientId)
         .collection(CollectionNames.pools)
-        .doc(clientPool.poolName)
+        .doc(now)
         .set(
-          clientPool.toJson(),
+          pool.toJson(),
         )
         .then((value) => debugPrint("Client Pool Added"))
         .catchError((error) => debugPrint("Failed to add Client Pool: $error"));
@@ -157,13 +159,12 @@ class ApiClientImpl implements ApiClient {
   }
 
   @override
-  Future<void> editClientPool(
-      String clientId, String poolId, ClientPool updatedPool) async {
+  Future<void> editClientPool(ClientPool updatedPool) async {
     final response = await firebaseFirestore!
         .collection(CollectionNames.clientPools)
-        .doc(clientId)
+        .doc(updatedPool.clientId)
         .collection(CollectionNames.pools)
-        .doc(poolId)
+        .doc(updatedPool.poolId)
         .update(
           updatedPool.toJson(),
         )
